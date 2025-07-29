@@ -1,0 +1,89 @@
+Here’s the **exact Replit prompt** you can copy-paste to your Replit AI or give to a developer to build your **Infra-Style Seller Onboarding Platform** for Bellu Kart:
+
+---
+
+### 🧠 Prompt to Paste into Replit AI / Developer
+
+> Build a simple web-based seller onboarding platform for Bellu Kart.
+
+> The goal is to let a D2C brand activate Bellu Kart’s 10-minute delivery infrastructure **without creating a storefront**. Most sellers already have their own websites.
+
+---
+
+### ✅ Core Features:
+
+1. **Onboarding Form** (Frontend)
+
+   * Brand Name (text)
+   * Website URL (text)
+   * Email (text)
+   * Phone Number (text)
+   * Category (dropdown: Personal Care, Wellness, Fashion, Electronics, Other)
+   * Expected Monthly Orders (number, optional)
+   * Submit button → `Activate Infra`
+
+2. **Backend Logic (Node.js + Express or Python Flask)**
+
+   * When form is submitted:
+
+     * Save seller info to in-memory store or simple JSON DB
+     * Generate a fake API key like `bk_seller_3942dfj3`
+     * Redirect to `/success`
+
+3. **Success Page**
+
+   * Show:
+
+     * ✅ “Bellu Infra Activated”
+     * API Key: `bk_seller_xxxxxx`
+     * Webhook URL: `https://bellu.ai/webhook/orders`
+     * Button: **“View API Docs”** → links to `/docs`
+   * Optionally: a message like:
+
+     > “You’ll receive integration steps via email. Our team will contact you within 24 hours.”
+
+4. **API Docs Page (`/docs`)**
+
+   * Include basic webhook format:
+
+     ```json
+     {
+       "order_id": "xyz123",
+       "items": ["Toothpaste", "Shampoo"],
+       "total_price": 480,
+       "delivery_address": "Indiranagar, Bengaluru",
+       "pickup_point": "Bellandur Dark Store"
+     }
+     ```
+   * Add sections:
+
+     * Authentication with API Key
+     * Webhook sample payload
+     * Order creation API (optional)
+     * Support contact
+
+5. **Bonus**
+
+   * Mobile responsive
+   * Use Tailwind CSS or Bootstrap
+   * Option to copy API Key easily (copy button)
+   * Hosted preview on Replit
+
+---
+
+### 🔑 Final Notes:
+
+* This is **infra onboarding**, not a storefront builder.
+* Don’t add product upload or store links.
+* Focus on making integration feel instant and simple.
+* Assume Bellu Kart handles routing + delivery behind the scenes.
+
+---
+
+Let me know if you want a **fully working version of this** built here with:
+
+* Frontend + backend code
+* Integration email copy
+* Swagger-style API documentation
+
+Just say: **"Generate full code and docs"**.
