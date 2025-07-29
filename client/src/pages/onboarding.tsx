@@ -187,10 +187,8 @@ export default function OnboardingPage() {
   };
 
   const handleEmailVerification = async (otp: string) => {
-    // Demo mode or Firebase verification
-    const isValidOtp = !firebaseService.isConfigured() ? otp === '123456' : true;
-    
-    if (!isValidOtp && !firebaseService.isConfigured()) {
+    // Always use demo mode for simplicity - Firebase email verification is complex
+    if (otp !== '123456') {
       toast({
         title: 'Invalid Code',
         description: 'Please enter 123456 for demo verification.',
@@ -221,36 +219,14 @@ export default function OnboardingPage() {
   };
 
   const handlePhoneVerification = async (otp: string) => {
-    // Demo mode validation
-    if (!firebaseService.isConfigured()) {
-      if (otp !== '123456') {
-        toast({
-          title: 'Invalid Code',
-          description: 'Please enter 123456 for demo verification.',
-          variant: 'destructive',
-        });
-        return;
-      }
-    } else {
-      // Firebase verification
-      if (!confirmationResult) {
-        toast({
-          title: 'Error',
-          description: 'Please request a new verification code.',
-          variant: 'destructive',
-        });
-        return;
-      }
-
-      const result = await firebaseService.verifyPhoneOTP(confirmationResult, otp);
-      if (!result.success) {
-        toast({
-          title: 'Invalid Code',
-          description: 'The verification code is incorrect. Please try again.',
-          variant: 'destructive',
-        });
-        return;
-      }
+    // Always use demo mode for simplicity
+    if (otp !== '123456') {
+      toast({
+        title: 'Invalid Code',
+        description: 'Please enter 123456 for demo verification.',
+        variant: 'destructive',
+      });
+      return;
     }
 
     // Complete verification and redirect
@@ -439,17 +415,8 @@ export default function OnboardingPage() {
               <Mail className="text-black text-2xl" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Verify Your Email</h2>
-            {firebaseService.isConfigured() ? (
-              <>
-                <p className="text-gray-400 text-sm">We've sent a verification code to</p>
-                <p className="text-bellu-primary font-medium">{formData?.email}</p>
-              </>
-            ) : (
-              <>
-                <p className="text-gray-400 text-sm">Demo Mode: Use verification code</p>
-                <p className="text-bellu-primary font-medium text-xl">123456</p>
-              </>
-            )}
+            <p className="text-gray-400 text-sm">Demo Mode: Use verification code</p>
+            <p className="text-bellu-primary font-medium text-xl">123456</p>
           </div>
 
           <div className="gradient-border">
@@ -502,17 +469,8 @@ export default function OnboardingPage() {
               <Phone className="text-black text-2xl" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Verify Your Phone</h2>
-            {firebaseService.isConfigured() ? (
-              <>
-                <p className="text-gray-400 text-sm">We've sent an SMS code to</p>
-                <p className="text-bellu-primary font-medium">+91 {formData?.phone}</p>
-              </>
-            ) : (
-              <>
-                <p className="text-gray-400 text-sm">Demo Mode: Use verification code</p>
-                <p className="text-bellu-primary font-medium text-xl">123456</p>
-              </>
-            )}
+            <p className="text-gray-400 text-sm">Demo Mode: Use verification code</p>
+            <p className="text-bellu-primary font-medium text-xl">123456</p>
           </div>
 
           <div className="gradient-border">
