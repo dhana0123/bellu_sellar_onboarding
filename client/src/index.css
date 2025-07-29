@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(0, 0%, 100%);
+  --muted: hsl(0, 0%, 20%);
+  --muted-foreground: hsl(0, 0%, 60%);
+  --popover: hsl(0, 0%, 10%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 10%);
+  --card-foreground: hsl(0, 0%, 100%);
+  --border: hsl(0, 0%, 20%);
+  --input: hsl(0, 0%, 20%);
+  --primary: hsl(169, 100%, 42%);
+  --primary-foreground: hsl(0, 0%, 0%);
+  --secondary: hsl(0, 0%, 20%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(0, 0%, 20%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(169, 100%, 42%);
+  --radius: 0.75rem;
+  
+  /* Bellu Kart specific colors */
+  --bellu-primary: hsl(169, 100%, 42%);
+  --bellu-gold: hsl(51, 100%, 50%);
+  --bellu-dark: hsl(0, 0%, 10%);
+  --bellu-darker: hsl(0, 0%, 6%);
+  --bellu-gray: hsl(0, 0%, 20%);
+  --bellu-light-gray: hsl(0, 0%, 40%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(0, 0%, 100%);
+  --muted: hsl(0, 0%, 20%);
+  --muted-foreground: hsl(0, 0%, 60%);
+  --popover: hsl(0, 0%, 10%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 10%);
+  --card-foreground: hsl(0, 0%, 100%);
+  --border: hsl(0, 0%, 20%);
+  --input: hsl(0, 0%, 20%);
+  --primary: hsl(169, 100%, 42%);
+  --primary-foreground: hsl(0, 0%, 0%);
+  --secondary: hsl(0, 0%, 20%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(0, 0%, 20%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(169, 100%, 42%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .gradient-border {
+    background: linear-gradient(45deg, var(--bellu-primary), var(--bellu-gold));
+    padding: 2px;
+    border-radius: 12px;
+  }
+  
+  .gradient-border-content {
+    background: var(--bellu-dark);
+    border-radius: 10px;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Custom color classes for Bellu Kart theme */
+.bg-bellu-primary { background-color: var(--bellu-primary); }
+.bg-bellu-gold { background-color: var(--bellu-gold); }
+.bg-bellu-dark { background-color: var(--bellu-dark); }
+.bg-bellu-darker { background-color: var(--bellu-darker); }
+.bg-bellu-gray { background-color: var(--bellu-gray); }
+.bg-bellu-light-gray { background-color: var(--bellu-light-gray); }
+
+.text-bellu-primary { color: var(--bellu-primary); }
+.text-bellu-gold { color: var(--bellu-gold); }
+.text-bellu-dark { color: var(--bellu-dark); }
+.text-bellu-darker { color: var(--bellu-darker); }
+.text-bellu-gray { color: var(--bellu-gray); }
+.text-bellu-light-gray { color: var(--bellu-light-gray); }
+
+.border-bellu-primary { border-color: var(--bellu-primary); }
+.border-bellu-gold { border-color: var(--bellu-gold); }
+.border-bellu-dark { border-color: var(--bellu-dark); }
+.border-bellu-darker { border-color: var(--bellu-darker); }
+.border-bellu-gray { border-color: var(--bellu-gray); }
+.border-bellu-light-gray { border-color: var(--bellu-light-gray); }
+
+.hover\:bg-bellu-primary:hover { background-color: var(--bellu-primary); }
+.hover\:bg-bellu-gold:hover { background-color: var(--bellu-gold); }
+.hover\:bg-bellu-gray:hover { background-color: var(--bellu-gray); }
+.hover\:bg-bellu-light-gray:hover { background-color: var(--bellu-light-gray); }
+
+.hover\:text-bellu-primary:hover { color: var(--bellu-primary); }
+.hover\:text-bellu-gold:hover { color: var(--bellu-gold); }
+
+.focus\:border-bellu-primary:focus { border-color: var(--bellu-primary); }
+.focus\:ring-bellu-primary\/20:focus { 
+  --tw-ring-color: hsl(169 100% 42% / 0.2);
+}
