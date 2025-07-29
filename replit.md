@@ -49,6 +49,7 @@ Preferred communication style: Simple, everyday language.
   - Firebase integration (UID storage)
 
 ### Frontend Pages
+- **Navigation Bar**: Fixed navbar with Bellu Kart branding and page navigation
 - **Onboarding Page**: Multi-step form with progress indicator
 - **Success Page**: API key display and integration instructions
 - **API Documentation**: Comprehensive integration guide with code examples

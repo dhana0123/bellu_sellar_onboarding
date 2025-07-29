@@ -141,7 +141,7 @@ export default function SuccessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen text-white">
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Success Animation */}
         <div className="text-center mb-12 animate-fade-in">

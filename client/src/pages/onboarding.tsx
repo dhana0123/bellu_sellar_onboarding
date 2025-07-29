@@ -276,7 +276,7 @@ export default function OnboardingPage() {
 
   if (currentStep === 1) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen text-white">
         <div className="max-w-2xl mx-auto px-4 py-12">
           <ProgressIndicator currentStep={currentStep} />
           
@@ -430,7 +430,7 @@ export default function OnboardingPage() {
 
   if (currentStep === 2) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen text-white">
         <div className="max-w-md mx-auto px-4 py-12">
           <ProgressIndicator currentStep={currentStep} />
           
@@ -493,7 +493,7 @@ export default function OnboardingPage() {
 
   if (currentStep === 3) {
     return (
-      <div className="min-h-screen bg-black text-white">
+      <div className="min-h-screen text-white">
         <div className="max-w-md mx-auto px-4 py-12">
           <ProgressIndicator currentStep={currentStep} />
           
