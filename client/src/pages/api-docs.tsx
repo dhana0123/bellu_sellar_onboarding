@@ -321,13 +321,7 @@ app.run(port=3000)`}
                             <div className="text-sm text-gray-400">Step-by-step tutorials</div>
                           </div>
                         </a>
-                        <a href="#" className="flex items-center p-3 bg-bellu-darker rounded-lg hover:bg-bellu-gray transition-colors">
-                          <MessageCircle className="text-bellu-gold mr-3" />
-                          <div>
-                            <div className="font-medium">Developer Community</div>
-                            <div className="text-sm text-gray-400">Join our Discord</div>
-                          </div>
-                        </a>
+                        
                       </div>
                     </div>
                   </div>
