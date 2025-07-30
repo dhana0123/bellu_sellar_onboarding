@@ -1,10 +1,10 @@
-# Bellu Kart Seller Onboarding Platform
+# Bellu Seller Onboarding Platform
 
 ## Overview
 
-This is a production-ready full-stack web application built for Bellu Kart's seller onboarding platform. The application allows D2C brands to activate Bellu Kart's 10-minute delivery infrastructure without creating a storefront. It features a modern React frontend with a Node.js/Express backend, MongoDB database integration via Mongoose, and Brevo email verification service.
+This is a production-ready full-stack web application built for Bellu's seller onboarding platform. The application allows D2C brands to activate Bellu's 10-minute delivery infrastructure without creating a storefront. It features a modern React frontend with a Node.js/Express backend, PostgreSQL database integration via Drizzle ORM, and Brevo email verification service.
 
-**Current Status**: ✅ Complete with email verification flow using Brevo, premium dark UI (Ola/Uber-inspired), and simplified 2-step onboarding process.
+**Current Status**: ✅ Complete with email verification flow using Brevo, professional tech company UI (black background, white buttons), and simplified 2-step onboarding process. Successfully migrated from MongoDB to PostgreSQL for Replit compatibility.
 
 ## User Preferences
 
@@ -19,7 +19,7 @@ Preferred communication style: Simple, everyday language.
 - **Routing**: Wouter for lightweight client-side routing
 - **State Management**: TanStack Query (React Query) for server state management
 - **Form Handling**: React Hook Form with Zod validation
-- **Styling**: Dark theme with custom Bellu Kart brand colors (teal primary, gold accents)
+- **Styling**: Professional tech company theme with black background and white primary buttons
 
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js framework
@@ -124,4 +124,12 @@ Preferred communication style: Simple, everyday language.
 - `npm run start`: Start production server
 - Database schemas are automatically synced via Mongoose models
 
-The application is designed to be deployed on platforms like Replit, with appropriate environment variable configuration for MongoDB connections and Brevo email service credentials.
+The application is designed to be deployed on platforms like Replit, with appropriate environment variable configuration for PostgreSQL connections and Brevo email service credentials.
+
+## Recent Changes (2025-01-30)
+- ✅ Successfully migrated from MongoDB + Mongoose to PostgreSQL + Drizzle ORM
+- ✅ Updated branding from "Bellu Kart" to "Bellu" 
+- ✅ Redesigned UI for serious tech company aesthetic (black background, white buttons, no gradients)
+- ✅ All database operations now use Drizzle with PostgreSQL
+- ✅ Removed all MongoDB dependencies and files
+- ✅ Created documentation for environment variables including original MongoDB setup for reference

@@ -45,8 +45,8 @@ export default function SuccessPage() {
     // Create and download Postman collection
     const collection = {
       info: {
-        name: 'Bellu Kart API',
-        description: 'API collection for Bellu Kart seller integration',
+        name: 'Bellu API',
+        description: 'API collection for Bellu seller integration',
         version: '1.0.0',
       },
       item: [

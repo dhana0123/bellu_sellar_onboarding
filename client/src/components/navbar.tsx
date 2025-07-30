@@ -20,19 +20,19 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-sm border-b border-bellu-gray">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
               <div className="flex items-center space-x-2 cursor-pointer">
-                <div className="w-8 h-8 bg-gradient-to-r from-bellu-primary to-bellu-gold rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
                   <Building2 className="text-black text-lg" />
                 </div>
                 <div>
-                  <div className="text-white font-bold text-lg">Bellu Kart</div>
-                  <div className="text-bellu-primary text-xs -mt-1">Seller Platform</div>
+                  <div className="text-white font-bold text-lg">Bellu</div>
+                  <div className="text-gray-400 text-xs -mt-1">Seller Platform</div>
                 </div>
               </div>
             </Link>
@@ -48,8 +48,8 @@ const Navbar = () => {
                     <div
                       className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 cursor-pointer ${
                         item.active
-                          ? 'bg-bellu-primary/20 text-bellu-primary'
-                          : 'text-gray-300 hover:text-white hover:bg-bellu-dark'
+                          ? 'bg-gray-800 text-white'
+                          : 'text-gray-300 hover:text-white hover:bg-gray-800'
                       }`}
                     >
                       <IconComponent className="w-4 h-4" />
@@ -71,8 +71,8 @@ const Navbar = () => {
                     <div
                       className={`p-2 rounded-md transition-colors duration-200 cursor-pointer ${
                         item.active
-                          ? 'bg-bellu-primary/20 text-bellu-primary'
-                          : 'text-gray-300 hover:text-white hover:bg-bellu-dark'
+                          ? 'bg-gray-800 text-white'
+                          : 'text-gray-300 hover:text-white hover:bg-gray-800'
                       }`}
                     >
                       <IconComponent className="w-5 h-5" />

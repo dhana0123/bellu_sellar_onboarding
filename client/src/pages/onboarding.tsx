@@ -39,15 +39,15 @@ function ProgressStep({ step, currentStep, label }: ProgressStepProps) {
     <div className="flex items-center">
       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
         isCompleted 
-          ? 'bg-bellu-primary text-black' 
+          ? 'bg-white text-black' 
           : isCurrent 
-            ? 'bg-bellu-primary text-black'
-            : 'bg-bellu-gray text-gray-400'
+            ? 'bg-white text-black'
+            : 'bg-gray-600 text-gray-400'
       }`}>
         {isCompleted ? <Check className="w-4 h-4" /> : step}
       </div>
       <span className={`ml-2 text-sm font-medium ${
-        isCompleted || isCurrent ? 'text-bellu-primary' : 'text-gray-400'
+        isCompleted || isCurrent ? 'text-white' : 'text-gray-400'
       }`}>
         {label}
       </span>
@@ -73,7 +73,7 @@ function ProgressIndicator({ currentStep }: { currentStep: number }) {
             />
             {index < steps.length - 1 && (
               <div className={`w-16 h-1 rounded ml-4 ${
-                step.number < currentStep ? 'bg-bellu-primary' : 'bg-bellu-gray'
+                step.number < currentStep ? 'bg-white' : 'bg-gray-600'
               }`} />
             )}
           </div>
@@ -203,22 +203,21 @@ export default function OnboardingPage() {
           
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Activate <span className="bg-gradient-to-r from-bellu-primary to-bellu-gold bg-clip-text text-transparent">10-Min Delivery</span>
+              Activate <span className="text-white">10-Min Delivery</span>
             </h1>
             <p className="text-xl text-gray-300 mb-2">Join India's fastest delivery infrastructure</p>
             <p className="text-sm text-gray-400">No storefront needed • Keep your existing website • Instant integration</p>
           </div>
 
-          <div className="gradient-border">
-            <Card className="gradient-border-content bg-bellu-dark border-none">
-              <CardContent className="p-8">
-                <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
+          <Card className="bg-gray-900 border border-gray-700">
+            <CardContent className="p-8">
+              <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
                   <div className="relative">
                     <Label htmlFor="brandName" className="text-gray-400">Brand Name *</Label>
                     <Input
                       id="brandName"
                       {...form.register('brandName')}
-                      className="mt-2 bg-bellu-darker border-bellu-gray focus:border-bellu-primary"
+                      className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
                       placeholder="Enter your brand name"
                     />
                     {form.formState.errors.brandName && (
@@ -232,7 +231,7 @@ export default function OnboardingPage() {
                       id="websiteUrl"
                       type="url"
                       {...form.register('websiteUrl')}
-                      className="mt-2 bg-bellu-darker border-bellu-gray focus:border-bellu-primary"
+                      className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
                       placeholder="https://your-website.com"
                     />
                     {form.formState.errors.websiteUrl && (
@@ -246,7 +245,7 @@ export default function OnboardingPage() {
                       id="email"
                       type="email"
                       {...form.register('email')}
-                      className="mt-2 bg-bellu-darker border-bellu-gray focus:border-bellu-primary"
+                      className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
                       placeholder="business@example.com"
                     />
                     {form.formState.errors.email && (
@@ -257,13 +256,13 @@ export default function OnboardingPage() {
                   <div className="relative">
                     <Label htmlFor="phone" className="text-gray-400">Phone Number *</Label>
                     <div className="flex mt-2">
-                      <div className="bg-bellu-darker border border-bellu-gray rounded-l-lg px-3 py-2 flex items-center">
+                      <div className="bg-gray-800 border border-gray-600 rounded-l-lg px-3 py-2 flex items-center">
                         <span className="text-white">🇮🇳 +91</span>
                       </div>
                       <Input
                         id="phone"
                         {...form.register('phone')}
-                        className="rounded-l-none bg-bellu-darker border-bellu-gray focus:border-bellu-primary"
+                        className="rounded-l-none bg-gray-800 border-gray-600 focus:border-white"
                         placeholder="10-digit mobile number"
                       />
                     </div>
@@ -275,10 +274,10 @@ export default function OnboardingPage() {
                   <div className="relative">
                     <Label htmlFor="category" className="text-gray-400">Business Category *</Label>
                     <Select onValueChange={(value) => form.setValue('category', value)}>
-                      <SelectTrigger className="mt-2 bg-bellu-darker border-bellu-gray focus:border-bellu-primary">
+                      <SelectTrigger className="mt-2 bg-gray-800 border-gray-600 focus:border-white">
                         <SelectValue placeholder="Select Business Category" />
                       </SelectTrigger>
-                      <SelectContent className="bg-bellu-darker border-bellu-gray">
+                      <SelectContent className="bg-gray-800 border-gray-600">
                         <SelectItem value="personal-care">Personal Care</SelectItem>
                         <SelectItem value="wellness">Wellness</SelectItem>
                         <SelectItem value="fashion">Fashion</SelectItem>
@@ -295,10 +294,10 @@ export default function OnboardingPage() {
                   <div className="relative">
                     <Label htmlFor="monthlyOrders" className="text-gray-400">Expected Monthly Orders (Optional)</Label>
                     <Select onValueChange={(value) => form.setValue('monthlyOrders', value)}>
-                      <SelectTrigger className="mt-2 bg-bellu-darker border-bellu-gray focus:border-bellu-primary">
+                      <SelectTrigger className="mt-2 bg-gray-800 border-gray-600 focus:border-white">
                         <SelectValue placeholder="Expected Monthly Orders" />
                       </SelectTrigger>
-                      <SelectContent className="bg-bellu-darker border-bellu-gray">
+                      <SelectContent className="bg-gray-800 border-gray-600">
                         <SelectItem value="0-100">0 - 100 orders</SelectItem>
                         <SelectItem value="100-500">100 - 500 orders</SelectItem>
                         <SelectItem value="500-1000">500 - 1,000 orders</SelectItem>
@@ -311,7 +310,7 @@ export default function OnboardingPage() {
                   <Button
                     type="submit"
                     disabled={createSellerMutation.isPending}
-                    className="w-full bg-gradient-to-r from-bellu-primary to-bellu-gold text-black font-semibold py-4 hover:shadow-lg hover:shadow-bellu-primary/25 transition-all duration-300"
+                    className="w-full bg-white text-black font-semibold py-4 hover:bg-gray-200 transition-all duration-300"
                   >
                     {createSellerMutation.isPending ? (
                       <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -324,14 +323,14 @@ export default function OnboardingPage() {
                   </Button>
                 </form>
 
-                <div className="mt-8 pt-6 border-t border-bellu-gray">
+                <div className="mt-8 pt-6 border-t border-gray-600">
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
-                      <div className="text-bellu-primary font-bold text-2xl">10 min</div>
+                      <div className="text-white font-bold text-2xl">10 min</div>
                       <div className="text-xs text-gray-400">Delivery Time</div>
                     </div>
                     <div>
-                      <div className="text-bellu-gold font-bold text-2xl">50+</div>
+                      <div className="text-white font-bold text-2xl">50+</div>
                       <div className="text-xs text-gray-400">Cities Covered</div>
                     </div>
                     <div>
@@ -344,7 +343,6 @@ export default function OnboardingPage() {
             </Card>
           </div>
         </div>
-
       </div>
     );
   }
@@ -356,16 +354,15 @@ export default function OnboardingPage() {
           <ProgressIndicator currentStep={currentStep} />
           
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-r from-bellu-primary to-bellu-gold rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
               <Mail className="text-black text-2xl" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Verify Your Email</h2>
             <p className="text-gray-400 text-sm">We've sent a 6-digit code to {formData?.email}</p>
-            <p className="text-bellu-primary font-medium text-sm">Check your inbox and enter the code below</p>
+            <p className="text-white font-medium text-sm">Check your inbox and enter the code below</p>
           </div>
 
-          <div className="gradient-border">
-            <Card className="gradient-border-content bg-bellu-dark border-none">
+          <Card className="bg-gray-900 border border-gray-700">
               <CardContent className="p-6">
                 <div className="space-y-6">
                   <div>
@@ -379,7 +376,7 @@ export default function OnboardingPage() {
                   <Button
                     variant="ghost"
                     onClick={() => startEmailVerification()}
-                    className="text-bellu-primary hover:text-bellu-gold"
+                    className="text-white hover:text-gray-300"
                   >
                     Resend Code
                   </Button>

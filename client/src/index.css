@@ -13,7 +13,7 @@
   --card-foreground: hsl(0, 0%, 100%);
   --border: hsl(0, 0%, 20%);
   --input: hsl(0, 0%, 20%);
-  --primary: hsl(169, 100%, 42%);
+  --primary: hsl(0, 0%, 100%);
   --primary-foreground: hsl(0, 0%, 0%);
   --secondary: hsl(0, 0%, 20%);
   --secondary-foreground: hsl(0, 0%, 100%);
@@ -21,12 +21,12 @@
   --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(169, 100%, 42%);
-  --radius: 0.75rem;
+  --ring: hsl(0, 0%, 100%);
+  --radius: 0.5rem;
   
-  /* Bellu Kart specific colors */
-  --bellu-primary: hsl(169, 100%, 42%);
-  --bellu-gold: hsl(51, 100%, 50%);
+  /* Bellu tech company colors - clean and professional */
+  --bellu-primary: hsl(0, 0%, 100%);
+  --bellu-secondary: hsl(0, 0%, 90%);
   --bellu-dark: hsl(0, 0%, 10%);
   --bellu-darker: hsl(0, 0%, 6%);
   --bellu-gray: hsl(0, 0%, 20%);
@@ -44,7 +44,7 @@
   --card-foreground: hsl(0, 0%, 100%);
   --border: hsl(0, 0%, 20%);
   --input: hsl(0, 0%, 20%);
-  --primary: hsl(169, 100%, 42%);
+  --primary: hsl(0, 0%, 100%);
   --primary-foreground: hsl(0, 0%, 0%);
   --secondary: hsl(0, 0%, 20%);
   --secondary-foreground: hsl(0, 0%, 100%);
@@ -52,7 +52,7 @@
   --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(169, 100%, 42%);
+  --ring: hsl(0, 0%, 100%);
 }
 
 @layer base {
@@ -66,17 +66,6 @@
 }
 
 @layer utilities {
-  .gradient-border {
-    background: linear-gradient(45deg, var(--bellu-primary), var(--bellu-gold));
-    padding: 2px;
-    border-radius: 12px;
-  }
-  
-  .gradient-border-content {
-    background: var(--bellu-dark);
-    border-radius: 10px;
-  }
-  
   .animate-fade-in {
     animation: fadeIn 0.5s ease-in-out;
   }
@@ -100,37 +89,27 @@
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Custom color classes for Bellu Kart theme */
+/* Custom color classes for Bellu tech theme */
 .bg-bellu-primary { background-color: var(--bellu-primary); }
-.bg-bellu-gold { background-color: var(--bellu-gold); }
+.bg-bellu-secondary { background-color: var(--bellu-secondary); }
 .bg-bellu-dark { background-color: var(--bellu-dark); }
 .bg-bellu-darker { background-color: var(--bellu-darker); }
 .bg-bellu-gray { background-color: var(--bellu-gray); }
 .bg-bellu-light-gray { background-color: var(--bellu-light-gray); }
 
 .text-bellu-primary { color: var(--bellu-primary); }
-.text-bellu-gold { color: var(--bellu-gold); }
+.text-bellu-secondary { color: var(--bellu-secondary); }
 .text-bellu-dark { color: var(--bellu-dark); }
 .text-bellu-darker { color: var(--bellu-darker); }
 .text-bellu-gray { color: var(--bellu-gray); }
 .text-bellu-light-gray { color: var(--bellu-light-gray); }
 
 .border-bellu-primary { border-color: var(--bellu-primary); }
-.border-bellu-gold { border-color: var(--bellu-gold); }
+.border-bellu-secondary { border-color: var(--bellu-secondary); }
 .border-bellu-dark { border-color: var(--bellu-dark); }
 .border-bellu-darker { border-color: var(--bellu-darker); }
 .border-bellu-gray { border-color: var(--bellu-gray); }
 .border-bellu-light-gray { border-color: var(--bellu-light-gray); }
 
 .hover\:bg-bellu-primary:hover { background-color: var(--bellu-primary); }
-.hover\:bg-bellu-gold:hover { background-color: var(--bellu-gold); }
-.hover\:bg-bellu-gray:hover { background-color: var(--bellu-gray); }
-.hover\:bg-bellu-light-gray:hover { background-color: var(--bellu-light-gray); }
-
-.hover\:text-bellu-primary:hover { color: var(--bellu-primary); }
-.hover\:text-bellu-gold:hover { color: var(--bellu-gold); }
-
-.focus\:border-bellu-primary:focus { border-color: var(--bellu-primary); }
-.focus\:ring-bellu-primary\/20:focus { 
-  --tw-ring-color: hsl(169 100% 42% / 0.2);
-}
+.hover\:bg-bellu-secondary:hover { background-color: var(--bellu-secondary); }
