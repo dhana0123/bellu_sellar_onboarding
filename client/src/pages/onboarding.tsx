@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -212,136 +212,135 @@ export default function OnboardingPage() {
           <Card className="bg-gray-900 border border-gray-700">
             <CardContent className="p-8">
               <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
-                  <div className="relative">
-                    <Label htmlFor="brandName" className="text-gray-400">Brand Name *</Label>
+                <div className="relative">
+                  <Label htmlFor="brandName" className="text-gray-400">Brand Name *</Label>
+                  <Input
+                    id="brandName"
+                    {...form.register('brandName')}
+                    className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
+                    placeholder="Enter your brand name"
+                  />
+                  {form.formState.errors.brandName && (
+                    <p className="text-red-400 text-sm mt-1">{form.formState.errors.brandName.message}</p>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <Label htmlFor="websiteUrl" className="text-gray-400">Website URL *</Label>
+                  <Input
+                    id="websiteUrl"
+                    type="url"
+                    {...form.register('websiteUrl')}
+                    className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
+                    placeholder="https://your-website.com"
+                  />
+                  {form.formState.errors.websiteUrl && (
+                    <p className="text-red-400 text-sm mt-1">{form.formState.errors.websiteUrl.message}</p>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <Label htmlFor="email" className="text-gray-400">Business Email *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    {...form.register('email')}
+                    className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
+                    placeholder="business@example.com"
+                  />
+                  {form.formState.errors.email && (
+                    <p className="text-red-400 text-sm mt-1">{form.formState.errors.email.message}</p>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <Label htmlFor="phone" className="text-gray-400">Phone Number *</Label>
+                  <div className="flex mt-2">
+                    <div className="bg-gray-800 border border-gray-600 rounded-l-lg px-3 py-2 flex items-center">
+                      <span className="text-white">🇮🇳 +91</span>
+                    </div>
                     <Input
-                      id="brandName"
-                      {...form.register('brandName')}
-                      className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
-                      placeholder="Enter your brand name"
+                      id="phone"
+                      {...form.register('phone')}
+                      className="rounded-l-none bg-gray-800 border-gray-600 focus:border-white"
+                      placeholder="10-digit mobile number"
                     />
-                    {form.formState.errors.brandName && (
-                      <p className="text-red-400 text-sm mt-1">{form.formState.errors.brandName.message}</p>
-                    )}
                   </div>
+                  {form.formState.errors.phone && (
+                    <p className="text-red-400 text-sm mt-1">{form.formState.errors.phone.message}</p>
+                  )}
+                </div>
 
-                  <div className="relative">
-                    <Label htmlFor="websiteUrl" className="text-gray-400">Website URL *</Label>
-                    <Input
-                      id="websiteUrl"
-                      type="url"
-                      {...form.register('websiteUrl')}
-                      className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
-                      placeholder="https://your-website.com"
-                    />
-                    {form.formState.errors.websiteUrl && (
-                      <p className="text-red-400 text-sm mt-1">{form.formState.errors.websiteUrl.message}</p>
-                    )}
+                <div className="relative">
+                  <Label htmlFor="category" className="text-gray-400">Business Category *</Label>
+                  <Select onValueChange={(value) => form.setValue('category', value)}>
+                    <SelectTrigger className="mt-2 bg-gray-800 border-gray-600 focus:border-white">
+                      <SelectValue placeholder="Select Business Category" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-800 border-gray-600">
+                      <SelectItem value="personal-care">Personal Care</SelectItem>
+                      <SelectItem value="wellness">Wellness</SelectItem>
+                      <SelectItem value="fashion">Fashion</SelectItem>
+                      <SelectItem value="electronics">Electronics</SelectItem>
+                      <SelectItem value="food-beverage">Food & Beverage</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {form.formState.errors.category && (
+                    <p className="text-red-400 text-sm mt-1">{form.formState.errors.category.message}</p>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <Label htmlFor="monthlyOrders" className="text-gray-400">Expected Monthly Orders (Optional)</Label>
+                  <Select onValueChange={(value) => form.setValue('monthlyOrders', value)}>
+                    <SelectTrigger className="mt-2 bg-gray-800 border-gray-600 focus:border-white">
+                      <SelectValue placeholder="Expected Monthly Orders" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-800 border-gray-600">
+                      <SelectItem value="0-100">0 - 100 orders</SelectItem>
+                      <SelectItem value="100-500">100 - 500 orders</SelectItem>
+                      <SelectItem value="500-1000">500 - 1,000 orders</SelectItem>
+                      <SelectItem value="1000-5000">1,000 - 5,000 orders</SelectItem>
+                      <SelectItem value="5000+">5,000+ orders</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={createSellerMutation.isPending}
+                  className="w-full bg-white text-black font-semibold py-4 hover:bg-gray-200 transition-all duration-300"
+                >
+                  {createSellerMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  ) : (
+                    <>
+                      Continue to Email Verification
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </form>
+
+              <div className="mt-8 pt-6 border-t border-gray-600">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-white font-bold text-2xl">10 min</div>
+                    <div className="text-xs text-gray-400">Delivery Time</div>
                   </div>
-
-                  <div className="relative">
-                    <Label htmlFor="email" className="text-gray-400">Business Email *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      {...form.register('email')}
-                      className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
-                      placeholder="business@example.com"
-                    />
-                    {form.formState.errors.email && (
-                      <p className="text-red-400 text-sm mt-1">{form.formState.errors.email.message}</p>
-                    )}
+                  <div>
+                    <div className="text-white font-bold text-2xl">50+</div>
+                    <div className="text-xs text-gray-400">Cities Covered</div>
                   </div>
-
-                  <div className="relative">
-                    <Label htmlFor="phone" className="text-gray-400">Phone Number *</Label>
-                    <div className="flex mt-2">
-                      <div className="bg-gray-800 border border-gray-600 rounded-l-lg px-3 py-2 flex items-center">
-                        <span className="text-white">🇮🇳 +91</span>
-                      </div>
-                      <Input
-                        id="phone"
-                        {...form.register('phone')}
-                        className="rounded-l-none bg-gray-800 border-gray-600 focus:border-white"
-                        placeholder="10-digit mobile number"
-                      />
-                    </div>
-                    {form.formState.errors.phone && (
-                      <p className="text-red-400 text-sm mt-1">{form.formState.errors.phone.message}</p>
-                    )}
-                  </div>
-
-                  <div className="relative">
-                    <Label htmlFor="category" className="text-gray-400">Business Category *</Label>
-                    <Select onValueChange={(value) => form.setValue('category', value)}>
-                      <SelectTrigger className="mt-2 bg-gray-800 border-gray-600 focus:border-white">
-                        <SelectValue placeholder="Select Business Category" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-800 border-gray-600">
-                        <SelectItem value="personal-care">Personal Care</SelectItem>
-                        <SelectItem value="wellness">Wellness</SelectItem>
-                        <SelectItem value="fashion">Fashion</SelectItem>
-                        <SelectItem value="electronics">Electronics</SelectItem>
-                        <SelectItem value="food-beverage">Food & Beverage</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {form.formState.errors.category && (
-                      <p className="text-red-400 text-sm mt-1">{form.formState.errors.category.message}</p>
-                    )}
-                  </div>
-
-                  <div className="relative">
-                    <Label htmlFor="monthlyOrders" className="text-gray-400">Expected Monthly Orders (Optional)</Label>
-                    <Select onValueChange={(value) => form.setValue('monthlyOrders', value)}>
-                      <SelectTrigger className="mt-2 bg-gray-800 border-gray-600 focus:border-white">
-                        <SelectValue placeholder="Expected Monthly Orders" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-800 border-gray-600">
-                        <SelectItem value="0-100">0 - 100 orders</SelectItem>
-                        <SelectItem value="100-500">100 - 500 orders</SelectItem>
-                        <SelectItem value="500-1000">500 - 1,000 orders</SelectItem>
-                        <SelectItem value="1000-5000">1,000 - 5,000 orders</SelectItem>
-                        <SelectItem value="5000+">5,000+ orders</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    disabled={createSellerMutation.isPending}
-                    className="w-full bg-white text-black font-semibold py-4 hover:bg-gray-200 transition-all duration-300"
-                  >
-                    {createSellerMutation.isPending ? (
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    ) : (
-                      <>
-                        Continue to Email Verification
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </>
-                    )}
-                  </Button>
-                </form>
-
-                <div className="mt-8 pt-6 border-t border-gray-600">
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-white font-bold text-2xl">10 min</div>
-                      <div className="text-xs text-gray-400">Delivery Time</div>
-                    </div>
-                    <div>
-                      <div className="text-white font-bold text-2xl">50+</div>
-                      <div className="text-xs text-gray-400">Cities Covered</div>
-                    </div>
-                    <div>
-                      <div className="text-white font-bold text-2xl">24/7</div>
-                      <div className="text-xs text-gray-400">Support</div>
-                    </div>
+                  <div>
+                    <div className="text-white font-bold text-2xl">24/7</div>
+                    <div className="text-xs text-gray-400">Support</div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -363,27 +362,26 @@ export default function OnboardingPage() {
           </div>
 
           <Card className="bg-gray-900 border border-gray-700">
-              <CardContent className="p-6">
-                <div className="space-y-6">
-                  <div>
-                    <Label className="block text-sm font-medium mb-3">Enter 6-digit code</Label>
-                    <OTPInput onComplete={handleEmailVerification} />
-                  </div>
+            <CardContent className="p-6">
+              <div className="space-y-6">
+                <div>
+                  <Label className="block text-sm font-medium mb-3">Enter 6-digit code</Label>
+                  <OTPInput onComplete={handleEmailVerification} />
                 </div>
+              </div>
 
-                <div className="mt-6 text-center">
-                  <p className="text-gray-400 text-sm mb-3">Didn't receive the code?</p>
-                  <Button
-                    variant="ghost"
-                    onClick={() => startEmailVerification()}
-                    className="text-white hover:text-gray-300"
-                  >
-                    Resend Code
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              <div className="mt-6 text-center">
+                <p className="text-gray-400 text-sm mb-3">Didn't receive the code?</p>
+                <Button
+                  variant="ghost"
+                  onClick={() => startEmailVerification()}
+                  className="text-white hover:text-gray-300"
+                >
+                  Resend Code
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
           <div className="mt-6 text-center">
             <Button
