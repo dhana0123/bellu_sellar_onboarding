@@ -228,7 +228,7 @@ export default function OnboardingPage() {
                   <Input
                     id="brandName"
                     {...form.register('brandName')}
-                    className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
+                    className="mt-2 bg-black border-gray-600 focus:border-white"
                     placeholder="Enter your brand name"
                   />
                   {form.formState.errors.brandName && (
@@ -242,7 +242,7 @@ export default function OnboardingPage() {
                     id="websiteUrl"
                     type="url"
                     {...form.register('websiteUrl')}
-                    className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
+                    className="mt-2 bg-black border-gray-600 focus:border-white"
                     placeholder="https://your-website.com"
                   />
                   {form.formState.errors.websiteUrl && (
@@ -256,7 +256,7 @@ export default function OnboardingPage() {
                     id="email"
                     type="email"
                     {...form.register('email')}
-                    className="mt-2 bg-gray-800 border-gray-600 focus:border-white"
+                    className="mt-2 bg-black border-gray-600 focus:border-white"
                     placeholder="business@example.com"
                   />
                   {form.formState.errors.email && (
@@ -267,13 +267,13 @@ export default function OnboardingPage() {
                 <div className="relative">
                   <Label htmlFor="phone" className="text-gray-400">Phone Number *</Label>
                   <div className="flex mt-2">
-                    <div className="bg-gray-800 border border-gray-600 rounded-l-lg px-3 py-2 flex items-center">
+                    <div className="bg-black border border-gray-600 rounded-l-lg px-3 py-2 flex items-center">
                       <span className="text-white">🇮🇳 +91</span>
                     </div>
                     <Input
                       id="phone"
                       {...form.register('phone')}
-                      className="rounded-l-none bg-gray-800 border-gray-600 focus:border-white"
+                      className="rounded-l-none bg-black border-gray-600 focus:border-white"
                       placeholder="10-digit mobile number"
                     />
                   </div>
@@ -285,10 +285,10 @@ export default function OnboardingPage() {
                 <div className="relative">
                   <Label htmlFor="category" className="text-gray-400">Business Category *</Label>
                   <Select onValueChange={(value) => form.setValue('category', value)}>
-                    <SelectTrigger className="mt-2 bg-gray-800 border-gray-600 focus:border-white">
+                    <SelectTrigger className="mt-2 bg-black border-gray-600 focus:border-white">
                       <SelectValue placeholder="Select Business Category" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-600">
+                    <SelectContent className="bg-black border-gray-600">
                       <SelectItem value="personal-care">Personal Care</SelectItem>
                       <SelectItem value="wellness">Wellness</SelectItem>
                       <SelectItem value="fashion">Fashion</SelectItem>
@@ -305,10 +305,10 @@ export default function OnboardingPage() {
                 <div className="relative">
                   <Label htmlFor="monthlyOrders" className="text-gray-400">Expected Monthly Orders (Optional)</Label>
                   <Select onValueChange={(value) => form.setValue('monthlyOrders', value)}>
-                    <SelectTrigger className="mt-2 bg-gray-800 border-gray-600 focus:border-white">
+                    <SelectTrigger className="mt-2 bg-black border-gray-600 focus:border-white">
                       <SelectValue placeholder="Expected Monthly Orders" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-600">
+                    <SelectContent className="bg-black border-gray-600">
                       <SelectItem value="0-100">0 - 100 orders</SelectItem>
                       <SelectItem value="100-500">100 - 500 orders</SelectItem>
                       <SelectItem value="500-1000">500 - 1,000 orders</SelectItem>

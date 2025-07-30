@@ -3,6 +3,7 @@ import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Book, Code, Lock, Plug, Shield, Phone, Mail, MessageCircle } from 'lucide-react';
+import CodeBlock from '@/components/code-block';
 
 export default function ApiDocsPage() {
   const [, setLocation] = useLocation();
@@ -101,21 +102,23 @@ export default function ApiDocsPage() {
                   <div className="space-y-4">
                     <div>
                       <h4 className="font-semibold mb-2">API Key</h4>
-                      <div className="bg-bellu-darker rounded-lg p-4">
-                        <code className="text-bellu-primary">Authorization: Bearer bk_seller_8f9d2a1c4e6b7h3j</code>
-                      </div>
+                      <CodeBlock
+                        code="Authorization: Bearer bk_seller_8f9d2a1c4e6b7h3j"
+                        language="text"
+                        title="Header Format"
+                      />
                     </div>
 
                     <div>
                       <h4 className="font-semibold mb-2">Example Request</h4>
-                      <div className="bg-bellu-darker rounded-lg p-4 overflow-x-auto">
-                        <pre className="text-sm text-gray-300">
-{`curl -X POST https://api.bellu.ai/v1/orders \\
+                      <CodeBlock
+                        code={`curl -X POST https://api.bellu.ai/v1/orders \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{"order_id": "ORD123", "items": [...], ...}'`}
-                        </pre>
-                      </div>
+                        language="curl"
+                        title="cURL Request"
+                      />
                     </div>
                   </div>
                 </CardContent>
@@ -135,16 +138,17 @@ export default function ApiDocsPage() {
                   <div className="space-y-6">
                     <div>
                       <h4 className="font-semibold mb-3">Webhook URL</h4>
-                      <div className="bg-bellu-darker rounded-lg p-4">
-                        <code className="text-bellu-primary">https://bellu.ai/webhook/orders</code>
-                      </div>
+                      <CodeBlock
+                        code="https://bellu.ai/webhook/orders"
+                        language="text"
+                        title="Endpoint URL"
+                      />
                     </div>
 
                     <div>
                       <h4 className="font-semibold mb-3">Sample Payload</h4>
-                      <div className="bg-bellu-darker rounded-lg p-4 overflow-x-auto">
-                        <pre className="text-sm text-gray-300">
-{`{
+                      <CodeBlock
+                        code={`{
   "event": "order.created",
   "timestamp": "2024-01-15T10:30:00Z",
   "data": {
@@ -176,22 +180,23 @@ export default function ApiDocsPage() {
     }
   }
 }`}
-                        </pre>
-                      </div>
+                        language="json"
+                        title="Webhook Payload"
+                      />
                     </div>
 
                     <div>
                       <h4 className="font-semibold mb-3">Response Format</h4>
                       <p className="text-gray-400 text-sm mb-3">Your webhook endpoint should respond with HTTP 200 and the following JSON:</p>
-                      <div className="bg-bellu-darker rounded-lg p-4">
-                        <pre className="text-sm text-gray-300">
-{`{
+                      <CodeBlock
+                        code={`{
   "status": "received",
   "order_id": "YOUR_ORDER_123",
   "estimated_prep_time": 300
 }`}
-                        </pre>
-                      </div>
+                        language="json"
+                        title="Response JSON"
+                      />
                     </div>
                   </div>
                 </CardContent>
@@ -214,9 +219,8 @@ export default function ApiDocsPage() {
                         <span className="w-4 h-4 bg-yellow-400 rounded mr-2"></span>
                         Node.js Express Webhook
                       </h4>
-                      <div className="bg-bellu-darker rounded-lg p-4 overflow-x-auto">
-                        <pre className="text-sm text-gray-300">
-{`const express = require('express');
+                      <CodeBlock
+                        code={`const express = require('express');
 const app = express();
 
 app.use(express.json());
@@ -240,8 +244,9 @@ app.post('/webhook/bellu-orders', (req, res) => {
 });
 
 app.listen(3000);`}
-                        </pre>
-                      </div>
+                        language="javascript"
+                        title="Node.js Express Server"
+                      />
                     </div>
 
                     {/* Python Example */}
@@ -250,9 +255,8 @@ app.listen(3000);`}
                         <span className="w-4 h-4 bg-blue-400 rounded mr-2"></span>
                         Python Flask Webhook
                       </h4>
-                      <div className="bg-bellu-darker rounded-lg p-4 overflow-x-auto">
-                        <pre className="text-sm text-gray-300">
-{`from flask import Flask, request, jsonify
+                      <CodeBlock
+                        code={`from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -273,8 +277,9 @@ def handle_order():
         })
 
 app.run(port=3000)`}
-                        </pre>
-                      </div>
+                        language="python"
+                        title="Python Flask Server"
+                      />
                     </div>
                   </div>
                 </CardContent>

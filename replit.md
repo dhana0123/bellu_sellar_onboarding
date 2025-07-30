@@ -4,7 +4,7 @@
 
 This is a production-ready full-stack web application built for Bellu's seller onboarding platform. The application allows D2C brands to activate Bellu's 10-minute delivery infrastructure without creating a storefront. It features a modern React frontend with a Node.js/Express backend, PostgreSQL database integration via Drizzle ORM, and Brevo email verification service.
 
-**Current Status**: ✅ Complete with email verification flow using Brevo, professional tech company UI (black background, white buttons), and simplified 2-step onboarding process. Successfully migrated from MongoDB to PostgreSQL for Replit compatibility.
+**Current Status**: ✅ Complete with email verification flow using Brevo, professional tech company UI (black background, white buttons), simplified 2-step onboarding process, and reverted back to MongoDB database. Features session management with logout functionality and syntax-highlighted API documentation.
 
 ## User Preferences
 
@@ -25,15 +25,16 @@ Preferred communication style: Simple, everyday language.
 - **Runtime**: Node.js with Express.js framework
 - **Language**: TypeScript with ES modules
 - **Database ODM**: Mongoose ODM for MongoDB integration
-- **Database**: MongoDB with connection pooling (reverted from PostgreSQL)
-- **Session Management**: Memory-based sessions for development
+- **Database**: MongoDB with connection pooling
+- **Session Management**: Express-session with in-memory store for development  
 - **Development**: tsx for TypeScript execution in development
 
 ### Migration Notes
 - **Original Database**: MongoDB with Mongoose ODM
-- **Previous Database**: PostgreSQL with Drizzle ORM (2025-01-30)
+- **Migration Period**: PostgreSQL with Drizzle ORM (2025-01-30)
 - **Current Database**: MongoDB with Mongoose ODM (reverted 2025-01-30)
 - **Reason**: User preference for MongoDB over PostgreSQL
+- **Session System**: Added persistent login sessions with logout functionality
 
 ### Authentication & Verification
 - **Brevo Integration**: Used for email verification with 300 free emails/day
@@ -127,9 +128,11 @@ Preferred communication style: Simple, everyday language.
 The application is designed to be deployed on platforms like Replit, with appropriate environment variable configuration for PostgreSQL connections and Brevo email service credentials.
 
 ## Recent Changes (2025-01-30)
-- ✅ Successfully migrated from MongoDB + Mongoose to PostgreSQL + Drizzle ORM
-- ✅ Updated branding from "Bellu Kart" to "Bellu" 
-- ✅ Redesigned UI for serious tech company aesthetic (black background, white buttons, no gradients)
-- ✅ All database operations now use Drizzle with PostgreSQL
-- ✅ Removed all MongoDB dependencies and files
-- ✅ Created documentation for environment variables including original MongoDB setup for reference
+- ✅ Successfully migrated from Replit Agent to regular Replit environment
+- ✅ Reverted database from PostgreSQL back to MongoDB per user request
+- ✅ Added session management system with persistent login after email verification
+- ✅ Added logout functionality to success/dashboard page
+- ✅ Changed form colors from bluish (gray-800) to pure black backgrounds
+- ✅ Enhanced API documentation with syntax-highlighted code blocks and copy buttons
+- ✅ Fixed auto-redirect system for authenticated users from onboarding to dashboard
+- ✅ All database operations restored to use Mongoose with MongoDB
