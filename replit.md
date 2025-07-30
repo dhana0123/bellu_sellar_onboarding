@@ -24,23 +24,23 @@ Preferred communication style: Simple, everyday language.
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js framework
 - **Language**: TypeScript with ES modules
-- **Database ORM**: Drizzle ORM for PostgreSQL integration
-- **Database**: PostgreSQL with connection pooling (migrated from MongoDB)
+- **Database ODM**: Mongoose ODM for MongoDB integration
+- **Database**: MongoDB with connection pooling (reverted from PostgreSQL)
 - **Session Management**: Memory-based sessions for development
 - **Development**: tsx for TypeScript execution in development
 
 ### Migration Notes
 - **Original Database**: MongoDB with Mongoose ODM
-- **Current Database**: PostgreSQL with Drizzle ORM
-- **Migration Date**: 2025-01-30
-- **Reason**: Replit environment compatibility and enhanced type safety
+- **Previous Database**: PostgreSQL with Drizzle ORM (2025-01-30)
+- **Current Database**: MongoDB with Mongoose ODM (reverted 2025-01-30)
+- **Reason**: User preference for MongoDB over PostgreSQL
 
 ### Authentication & Verification
 - **Brevo Integration**: Used for email verification with 300 free emails/day
 - **OTP System**: 6-digit email verification codes with 10-minute expiration
 - **Verification Flow**: 2-step process: Details → Email Verification → Success
 - **Email Service**: Real email delivery via Brevo API with branded templates
-- **Database Storage**: Email verification tokens stored in MongoDB with automatic expiration
+- **Database Storage**: Email verification tokens stored in MongoDB with automatic TTL expiration
 
 ## Key Components
 

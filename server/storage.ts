@@ -1,122 +1,237 @@
-import { sellers, type Seller, type InsertSeller, type User, type InsertUser, users, emailVerificationTokens, type EmailToken, type InsertEmailToken } from "@shared/schema";
-import { db } from "./db";
-import { eq, and, gt } from "drizzle-orm";
+import { 
+  User, 
+  Seller, 
+  EmailVerificationToken,
+  type UserType, 
+  type SellerType, 
+  type EmailTokenType,
+  type InsertUser, 
+  type InsertSeller, 
+  type InsertEmailToken 
+} from "@shared/schema";
+import connectDB from "./db";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
-  createSeller(seller: InsertSeller): Promise<Seller>;
-  getSellerById(id: string): Promise<Seller | undefined>;
-  getSellerByEmail(email: string): Promise<Seller | undefined>;
-  getSellerByApiKey(apiKey: string): Promise<Seller | undefined>;
-  updateSellerVerification(id: string, emailVerified?: boolean): Promise<Seller | undefined>;
-  updateSellerApiKey(id: string, apiKey: string): Promise<Seller | undefined>;
-  createEmailToken(token: InsertEmailToken): Promise<EmailToken>;
-  getEmailToken(email: string, token: string): Promise<EmailToken | undefined>;
+  getUser(id: string): Promise<UserType | undefined>;
+  getUserByUsername(username: string): Promise<UserType | undefined>;
+  createUser(user: InsertUser): Promise<UserType>;
+  createSeller(seller: InsertSeller): Promise<SellerType>;
+  getSellerById(id: string): Promise<SellerType | undefined>;
+  getSellerByEmail(email: string): Promise<SellerType | undefined>;
+  getSellerByApiKey(apiKey: string): Promise<SellerType | undefined>;
+  updateSellerVerification(id: string, emailVerified?: boolean): Promise<SellerType | undefined>;
+  updateSellerApiKey(id: string, apiKey: string): Promise<SellerType | undefined>;
+  createEmailToken(token: InsertEmailToken): Promise<EmailTokenType>;
+  getEmailToken(email: string, token: string): Promise<EmailTokenType | undefined>;
   deleteEmailToken(email: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
-  async getUser(id: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user || undefined;
+  constructor() {
+    // Ensure database connection on initialization
+    connectDB().catch(console.error);
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
-    return user || undefined;
+  async getUser(id: string): Promise<UserType | undefined> {
+    await connectDB();
+    const user = await User.findById(id).lean();
+    return user ? { 
+      _id: user._id.toString(),
+      username: user.username,
+      password: user.password,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    } : undefined;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(insertUser)
-      .returning();
-    return user;
+  async getUserByUsername(username: string): Promise<UserType | undefined> {
+    await connectDB();
+    const user = await User.findOne({ username }).lean();
+    return user ? { 
+      _id: user._id.toString(),
+      username: user.username,
+      password: user.password,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    } : undefined;
   }
 
-  async createSeller(insertSeller: InsertSeller): Promise<Seller> {
+  async createUser(insertUser: InsertUser): Promise<UserType> {
+    await connectDB();
+    const user = new User(insertUser);
+    await user.save();
+    return { 
+      _id: user._id.toString(),
+      username: user.username,
+      password: user.password,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
+  }
+
+  async createSeller(insertSeller: InsertSeller): Promise<SellerType> {
+    await connectDB();
     const apiKey = `bk_seller_${randomUUID().replace(/-/g, '').substring(0, 16)}`;
     
-    const [seller] = await db
-      .insert(sellers)
-      .values({
-        ...insertSeller,
-        apiKey,
-      })
-      .returning();
-    return seller;
+    const seller = new Seller({
+      ...insertSeller,
+      apiKey,
+    });
+    await seller.save();
+    return { 
+      _id: seller._id.toString(),
+      brandName: seller.brandName,
+      websiteUrl: seller.websiteUrl,
+      email: seller.email,
+      phone: seller.phone,
+      category: seller.category,
+      monthlyOrders: seller.monthlyOrders,
+      apiKey: seller.apiKey,
+      emailVerified: seller.emailVerified,
+      isActive: seller.isActive,
+      createdAt: seller.createdAt,
+      updatedAt: seller.updatedAt
+    };
   }
 
-  async getSellerById(id: string): Promise<Seller | undefined> {
-    const [seller] = await db.select().from(sellers).where(eq(sellers.id, id));
-    return seller || undefined;
+  async getSellerById(id: string): Promise<SellerType | undefined> {
+    await connectDB();
+    const seller = await Seller.findById(id).lean();
+    return seller ? { 
+      _id: seller._id.toString(),
+      brandName: seller.brandName,
+      websiteUrl: seller.websiteUrl,
+      email: seller.email,
+      phone: seller.phone,
+      category: seller.category,
+      monthlyOrders: seller.monthlyOrders,
+      apiKey: seller.apiKey,
+      emailVerified: seller.emailVerified,
+      isActive: seller.isActive,
+      createdAt: seller.createdAt,
+      updatedAt: seller.updatedAt
+    } : undefined;
   }
 
-  async getSellerByEmail(email: string): Promise<Seller | undefined> {
-    const [seller] = await db.select().from(sellers).where(eq(sellers.email, email));
-    return seller || undefined;
+  async getSellerByEmail(email: string): Promise<SellerType | undefined> {
+    await connectDB();
+    const seller = await Seller.findOne({ email }).lean();
+    return seller ? { 
+      _id: seller._id.toString(),
+      brandName: seller.brandName,
+      websiteUrl: seller.websiteUrl,
+      email: seller.email,
+      phone: seller.phone,
+      category: seller.category,
+      monthlyOrders: seller.monthlyOrders,
+      apiKey: seller.apiKey,
+      emailVerified: seller.emailVerified,
+      isActive: seller.isActive,
+      createdAt: seller.createdAt,
+      updatedAt: seller.updatedAt
+    } : undefined;
   }
 
-  async getSellerByApiKey(apiKey: string): Promise<Seller | undefined> {
-    const [seller] = await db.select().from(sellers).where(eq(sellers.apiKey, apiKey));
-    return seller || undefined;
+  async getSellerByApiKey(apiKey: string): Promise<SellerType | undefined> {
+    await connectDB();
+    const seller = await Seller.findOne({ apiKey }).lean();
+    return seller ? { 
+      _id: seller._id.toString(),
+      brandName: seller.brandName,
+      websiteUrl: seller.websiteUrl,
+      email: seller.email,
+      phone: seller.phone,
+      category: seller.category,
+      monthlyOrders: seller.monthlyOrders,
+      apiKey: seller.apiKey,
+      emailVerified: seller.emailVerified,
+      isActive: seller.isActive,
+      createdAt: seller.createdAt,
+      updatedAt: seller.updatedAt
+    } : undefined;
   }
 
-  async updateSellerVerification(id: string, emailVerified?: boolean): Promise<Seller | undefined> {
+  async updateSellerVerification(id: string, emailVerified?: boolean): Promise<SellerType | undefined> {
+    await connectDB();
     const updates: any = {};
     if (emailVerified !== undefined) {
       updates.emailVerified = emailVerified ? new Date() : null;
     }
 
-    const [seller] = await db
-      .update(sellers)
-      .set(updates)
-      .where(eq(sellers.id, id))
-      .returning();
-    return seller || undefined;
+    const seller = await Seller.findByIdAndUpdate(id, updates, { new: true }).lean();
+    return seller ? { 
+      _id: seller._id.toString(),
+      brandName: seller.brandName,
+      websiteUrl: seller.websiteUrl,
+      email: seller.email,
+      phone: seller.phone,
+      category: seller.category,
+      monthlyOrders: seller.monthlyOrders,
+      apiKey: seller.apiKey,
+      emailVerified: seller.emailVerified,
+      isActive: seller.isActive,
+      createdAt: seller.createdAt,
+      updatedAt: seller.updatedAt
+    } : undefined;
   }
 
-  async updateSellerApiKey(id: string, apiKey: string): Promise<Seller | undefined> {
-    const [seller] = await db
-      .update(sellers)
-      .set({ apiKey })
-      .where(eq(sellers.id, id))
-      .returning();
-    return seller || undefined;
+  async updateSellerApiKey(id: string, apiKey: string): Promise<SellerType | undefined> {
+    await connectDB();
+    const seller = await Seller.findByIdAndUpdate(id, { apiKey }, { new: true }).lean();
+    return seller ? { 
+      _id: seller._id.toString(),
+      brandName: seller.brandName,
+      websiteUrl: seller.websiteUrl,
+      email: seller.email,
+      phone: seller.phone,
+      category: seller.category,
+      monthlyOrders: seller.monthlyOrders,
+      apiKey: seller.apiKey,
+      emailVerified: seller.emailVerified,
+      isActive: seller.isActive,
+      createdAt: seller.createdAt,
+      updatedAt: seller.updatedAt
+    } : undefined;
   }
 
-  async createEmailToken(insertToken: InsertEmailToken): Promise<EmailToken> {
+  async createEmailToken(insertToken: InsertEmailToken): Promise<EmailTokenType> {
+    await connectDB();
     // Delete any existing tokens for this email first
     await this.deleteEmailToken(insertToken.email);
     
-    const [token] = await db
-      .insert(emailVerificationTokens)
-      .values(insertToken)
-      .returning();
-    return token;
+    const token = new EmailVerificationToken(insertToken);
+    await token.save();
+    return { 
+      _id: token._id.toString(),
+      email: token.email,
+      token: token.token,
+      expiresAt: token.expiresAt,
+      createdAt: token.createdAt,
+      updatedAt: token.updatedAt
+    };
   }
 
-  async getEmailToken(email: string, token: string): Promise<EmailToken | undefined> {
-    const [emailToken] = await db
-      .select()
-      .from(emailVerificationTokens)
-      .where(
-        and(
-          eq(emailVerificationTokens.email, email),
-          eq(emailVerificationTokens.token, token),
-          gt(emailVerificationTokens.expiresAt, new Date())
-        )
-      );
-    return emailToken || undefined;
+  async getEmailToken(email: string, token: string): Promise<EmailTokenType | undefined> {
+    await connectDB();
+    const emailToken = await EmailVerificationToken.findOne({
+      email,
+      token,
+      expiresAt: { $gt: new Date() }
+    }).lean();
+    return emailToken ? { 
+      _id: emailToken._id.toString(),
+      email: emailToken.email,
+      token: emailToken.token,
+      expiresAt: emailToken.expiresAt,
+      createdAt: emailToken.createdAt,
+      updatedAt: emailToken.updatedAt
+    } : undefined;
   }
 
   async deleteEmailToken(email: string): Promise<void> {
-    await db
-      .delete(emailVerificationTokens)
-      .where(eq(emailVerificationTokens.email, email));
+    await connectDB();
+    await EmailVerificationToken.deleteMany({ email });
   }
 }
 
