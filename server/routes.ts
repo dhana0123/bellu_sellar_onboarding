@@ -17,11 +17,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create seller endpoint
   app.post("/api/sellers", async (req, res) => {
     try {
-      const sellerData = insertSellerSchema.parse(req.body);
-      const seller = await storage.createSeller(sellerData);
+      const validatedData = insertSellerSchema.parse(req.body);
+      
+      // Check if seller with this email already exists
+      const existingSeller = await storage.getSellerByEmail(validatedData.email);
+      if (existingSeller) {
+        return res.status(400).json({ 
+          success: false, 
+          error: "A seller with this email address already exists. Please use a different email or contact support if this is your email." 
+        });
+      }
+      
+      const seller = await storage.createSeller(validatedData);
       res.json({ success: true, seller });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating seller:", error);
+      
+      // Handle MongoDB duplicate key error specifically
+      if (error.code === 11000) {
+        return res.status(400).json({ 
+          success: false, 
+          error: "A seller with this email address already exists. Please use a different email or contact support if this is your email." 
+        });
+      }
+      
       res.status(400).json({ success: false, error: "Invalid seller data" });
     }
   });

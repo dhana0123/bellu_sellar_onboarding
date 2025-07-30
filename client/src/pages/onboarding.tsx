@@ -105,7 +105,13 @@ export default function OnboardingPage() {
   const createSellerMutation = useMutation({
     mutationFn: async (data: FormData) => {
       const response = await apiRequest('POST', '/api/sellers', data);
-      return response.json();
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to save your information');
+      }
+      
+      return result;
     },
     onSuccess: (data) => {
       setSellerId(data.seller.id);
@@ -113,10 +119,10 @@ export default function OnboardingPage() {
       // Start email verification
       startEmailVerification(data.seller.id);
     },
-    onError: () => {
+    onError: (error: Error) => {
       toast({
-        title: 'Error',
-        description: 'Failed to save your information. Please try again.',
+        title: 'Registration Error',
+        description: error.message || 'Failed to save your information. Please try again.',
         variant: 'destructive',
       });
     },
