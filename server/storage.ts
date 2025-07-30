@@ -1,6 +1,6 @@
-import { sellers, type Seller, type InsertSeller, type User, type InsertUser, users } from "@shared/schema";
+import { sellers, type Seller, type InsertSeller, type User, type InsertUser, users, emailVerificationTokens, type EmailToken, type InsertEmailToken } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, and, gt } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -11,8 +11,11 @@ export interface IStorage {
   getSellerById(id: string): Promise<Seller | undefined>;
   getSellerByEmail(email: string): Promise<Seller | undefined>;
   getSellerByApiKey(apiKey: string): Promise<Seller | undefined>;
-  updateSellerVerification(id: string, emailVerified?: boolean, phoneVerified?: boolean): Promise<Seller | undefined>;
+  updateSellerVerification(id: string, emailVerified?: boolean): Promise<Seller | undefined>;
   updateSellerApiKey(id: string, apiKey: string): Promise<Seller | undefined>;
+  createEmailToken(token: InsertEmailToken): Promise<EmailToken>;
+  getEmailToken(email: string, token: string): Promise<EmailToken | undefined>;
+  deleteEmailToken(email: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -62,13 +65,10 @@ export class DatabaseStorage implements IStorage {
     return seller || undefined;
   }
 
-  async updateSellerVerification(id: string, emailVerified?: boolean, phoneVerified?: boolean): Promise<Seller | undefined> {
+  async updateSellerVerification(id: string, emailVerified?: boolean): Promise<Seller | undefined> {
     const updates: any = {};
     if (emailVerified !== undefined) {
       updates.emailVerified = emailVerified ? new Date() : null;
-    }
-    if (phoneVerified !== undefined) {
-      updates.phoneVerified = phoneVerified ? new Date() : null;
     }
 
     const [seller] = await db
@@ -86,6 +86,37 @@ export class DatabaseStorage implements IStorage {
       .where(eq(sellers.id, id))
       .returning();
     return seller || undefined;
+  }
+
+  async createEmailToken(insertToken: InsertEmailToken): Promise<EmailToken> {
+    // Delete any existing tokens for this email first
+    await this.deleteEmailToken(insertToken.email);
+    
+    const [token] = await db
+      .insert(emailVerificationTokens)
+      .values(insertToken)
+      .returning();
+    return token;
+  }
+
+  async getEmailToken(email: string, token: string): Promise<EmailToken | undefined> {
+    const [emailToken] = await db
+      .select()
+      .from(emailVerificationTokens)
+      .where(
+        and(
+          eq(emailVerificationTokens.email, email),
+          eq(emailVerificationTokens.token, token),
+          gt(emailVerificationTokens.expiresAt, new Date())
+        )
+      );
+    return emailToken || undefined;
+  }
+
+  async deleteEmailToken(email: string): Promise<void> {
+    await db
+      .delete(emailVerificationTokens)
+      .where(eq(emailVerificationTokens.email, email));
   }
 }
 

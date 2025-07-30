@@ -4,7 +4,7 @@
 
 This is a production-ready full-stack web application built for Bellu Kart's seller onboarding platform. The application allows D2C brands to activate Bellu Kart's 10-minute delivery infrastructure without creating a storefront. It features a modern React frontend with a Node.js/Express backend, PostgreSQL database integration via Drizzle ORM, and Firebase integration for email and phone verification services.
 
-**Current Status**: ✅ Complete with full verification flow, premium dark UI (Ola/Uber-inspired), and Firebase Auth integration.
+**Current Status**: ✅ Complete with email verification flow using Brevo, premium dark UI (Ola/Uber-inspired), and simplified 2-step onboarding process.
 
 ## User Preferences
 
@@ -30,11 +30,11 @@ Preferred communication style: Simple, everyday language.
 - **Development**: tsx for TypeScript execution in development
 
 ### Authentication & Verification
-- **Firebase Integration**: Used for email and phone verification with fallback demo mode
-- **OTP System**: Custom OTP input component for phone verification
-- **Verification Flow**: 4-step process: Details → Email Verification → Phone Verification → Success
-- **Demo Mode**: Uses code `123456` when Firebase credentials aren't configured
-- **Production Mode**: Full Firebase Auth with real SMS/Email when properly configured
+- **Brevo Integration**: Used for email verification with 300 free emails/day
+- **OTP System**: 6-digit email verification codes with 10-minute expiration
+- **Verification Flow**: 2-step process: Details → Email Verification → Success
+- **Email Service**: Real email delivery via Brevo API with branded templates
+- **Database Storage**: Email verification tokens stored in PostgreSQL with expiration
 
 ## Key Components
 
@@ -45,8 +45,8 @@ Preferred communication style: Simple, everyday language.
   - Contact information (email, phone)
   - Business metrics (monthly orders)
   - API credentials (unique API keys)
-  - Verification status (email/phone timestamps)
-  - Firebase integration (UID storage)
+  - Verification status (email verification timestamp)
+- **Email Verification Tokens Table**: Temporary OTP storage with expiration
 
 ### Frontend Pages
 - **Navigation Bar**: Fixed navbar with Bellu Kart branding and page navigation
@@ -65,8 +65,9 @@ Preferred communication style: Simple, everyday language.
 1. **Seller Registration**:
    - User fills out onboarding form with brand information
    - Form data validated using Zod schemas
-   - Email and phone verification initiated via Firebase
-   - OTP verification completes the registration
+   - Email verification initiated via Brevo
+   - 6-digit OTP sent to email with branded template
+   - Email verification completes the registration
    - Unique API key generated and stored
    - Seller redirected to success page
 
@@ -84,7 +85,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Core Dependencies
 - **Database**: Neon PostgreSQL serverless database
-- **Firebase**: Authentication and phone verification services
+- **Email Service**: Brevo (formerly Sendinblue) for email verification
 - **UI Components**: Radix UI primitives with shadcn/ui styling
 - **Validation**: Zod for runtime type checking and form validation
 

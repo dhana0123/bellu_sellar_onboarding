@@ -17,12 +17,18 @@ export const sellers = pgTable("sellers", {
   phone: text("phone").notNull(),
   category: text("category").notNull(),
   monthlyOrders: text("monthly_orders"),
-  firebaseUid: text("firebase_uid"),
   apiKey: text("api_key").notNull().unique(),
   emailVerified: timestamp("email_verified"),
-  phoneVerified: timestamp("phone_verified"),
   createdAt: timestamp("created_at").defaultNow(),
   isActive: integer("is_active").default(1),
+});
+
+export const emailVerificationTokens = pgTable("email_verification_tokens", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull(),
+  token: text("token").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -34,12 +40,18 @@ export const insertSellerSchema = createInsertSchema(sellers).omit({
   id: true,
   apiKey: true,
   emailVerified: true,
-  phoneVerified: true,
   createdAt: true,
   isActive: true,
+});
+
+export const insertEmailTokenSchema = createInsertSchema(emailVerificationTokens).omit({
+  id: true,
+  createdAt: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertSeller = z.infer<typeof insertSellerSchema>;
 export type Seller = typeof sellers.$inferSelect;
+export type InsertEmailToken = z.infer<typeof insertEmailTokenSchema>;
+export type EmailToken = typeof emailVerificationTokens.$inferSelect;

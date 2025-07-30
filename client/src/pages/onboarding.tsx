@@ -11,9 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { OTPInput } from '@/components/ui/otp-input';
 import { useToast } from '@/hooks/use-toast';
-import { firebaseService } from '@/lib/firebase';
 import { apiRequest } from '@/lib/queryClient';
-import { Loader2, Mail, Phone, Bolt, Check, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Loader2, Mail, Check, ArrowLeft, ArrowRight } from 'lucide-react';
 
 const formSchema = z.object({
   brandName: z.string().min(1, 'Brand name is required'),
@@ -60,26 +59,24 @@ function ProgressIndicator({ currentStep }: { currentStep: number }) {
   const steps = [
     { number: 1, label: 'Details' },
     { number: 2, label: 'Email' },
-    { number: 3, label: 'Phone' },
-    { number: 4, label: 'Activate' },
   ];
 
   return (
     <div className="mb-8">
       <div className="flex items-center justify-center space-x-4 mb-4">
         {steps.map((step, index) => (
-          <React.Fragment key={step.number}>
+          <div key={step.number} className="flex items-center">
             <ProgressStep
               step={step.number}
               currentStep={currentStep}
               label={step.label}
             />
             {index < steps.length - 1 && (
-              <div className={`w-16 h-1 rounded ${
+              <div className={`w-16 h-1 rounded ml-4 ${
                 step.number < currentStep ? 'bg-bellu-primary' : 'bg-bellu-gray'
               }`} />
             )}
-          </React.Fragment>
+          </div>
         ))}
       </div>
     </div>
@@ -90,7 +87,6 @@ export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [sellerId, setSellerId] = useState<string>('');
-  const [confirmationResult, setConfirmationResult] = useState<any>(null);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
@@ -115,7 +111,7 @@ export default function OnboardingPage() {
       setSellerId(data.seller.id);
       setCurrentStep(2);
       // Start email verification
-      startEmailVerification();
+      startEmailVerification(data.seller.id);
     },
     onError: () => {
       toast({
@@ -126,60 +122,36 @@ export default function OnboardingPage() {
     },
   });
 
-  const startEmailVerification = async () => {
-    if (!formData?.email) return;
+  const startEmailVerification = async (sellerIdParam?: string) => {
+    const id = sellerIdParam || sellerId;
+    if (!id) return;
     
-    if (!firebaseService.isConfigured()) {
+    try {
+      const response = await apiRequest('POST', `/api/sellers/${id}/send-verification`);
+      const data = await response.json();
+      
+      if (data.success) {
+        toast({
+          title: 'Email Sent',
+          description: 'Please check your email for the verification code.',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to send verification email. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
       toast({
-        title: 'Email Verification Ready',
-        description: 'Use verification code: 123456 for demo purposes.',
-      });
-      return;
-    }
-    
-    const result = await firebaseService.sendEmailVerification(formData.email);
-    if (!result.success) {
-      toast({
-        title: 'Firebase Error',
-        description: result.error || 'Failed to send email verification. Using demo code: 123456',
+        title: 'Error',
+        description: 'Failed to send verification email. Please try again.',
         variant: 'destructive',
-      });
-    } else {
-      toast({
-        title: 'Email Sent',
-        description: 'Please check your email for the verification code.',
       });
     }
   };
 
-  const startPhoneVerification = async () => {
-    if (!formData?.phone) return;
-    
-    if (!firebaseService.isConfigured()) {
-      toast({
-        title: 'Phone Verification Ready',
-        description: 'Use verification code: 123456 for demo purposes.',
-      });
-      return;
-    }
-    
-    const phoneNumber = `+91${formData.phone}`;
-    const result = await firebaseService.sendPhoneVerification(phoneNumber);
-    
-    if (result.success) {
-      setConfirmationResult(result.confirmationResult);
-      toast({
-        title: 'SMS Sent',
-        description: 'Please check your phone for the verification code.',
-      });
-    } else {
-      toast({
-        title: 'Firebase Error',
-        description: result.error || 'Firebase SMS failed. Use demo code: 123456',
-        variant: 'destructive',
-      });
-    }
-  };
+
 
   const handleFormSubmit = async (data: FormData) => {
     setFormData(data);
@@ -187,28 +159,25 @@ export default function OnboardingPage() {
   };
 
   const handleEmailVerification = async (otp: string) => {
-    // Always use demo mode for simplicity - Firebase email verification is complex
-    if (otp !== '123456') {
-      toast({
-        title: 'Invalid Code',
-        description: 'Please enter 123456 for demo verification.',
-        variant: 'destructive',
-      });
-      return;
-    }
-    
     try {
-      await apiRequest('PATCH', `/api/sellers/${sellerId}/verification`, {
-        emailVerified: true,
+      const response = await apiRequest('POST', `/api/sellers/${sellerId}/verify-email`, {
+        otp: otp,
       });
+      const data = await response.json();
       
-      setCurrentStep(3);
-      startPhoneVerification();
-      
-      toast({
-        title: 'Email Verified',
-        description: 'Your email has been successfully verified.',
-      });
+      if (data.success) {
+        toast({
+          title: 'Email Verified',
+          description: 'Your email has been successfully verified.',
+        });
+        setLocation(`/success?sellerId=${sellerId}`);
+      } else {
+        toast({
+          title: 'Invalid Code',
+          description: data.error || 'Please check the verification code and try again.',
+          variant: 'destructive',
+        });
+      }
     } catch (error) {
       toast({
         title: 'Verification Failed',
@@ -218,37 +187,7 @@ export default function OnboardingPage() {
     }
   };
 
-  const handlePhoneVerification = async (otp: string) => {
-    // Always use demo mode for simplicity
-    if (otp !== '123456') {
-      toast({
-        title: 'Invalid Code',
-        description: 'Please enter 123456 for demo verification.',
-        variant: 'destructive',
-      });
-      return;
-    }
 
-    // Complete verification and redirect
-    try {
-      await apiRequest('PATCH', `/api/sellers/${sellerId}/verification`, {
-        phoneVerified: true,
-      });
-      
-      setLocation(`/success?sellerId=${sellerId}`);
-      
-      toast({
-        title: 'Phone Verified',
-        description: 'Your phone has been successfully verified.',
-      });
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to complete verification. Please try again.',
-        variant: 'destructive',
-      });
-    }
-  };
 
   if (currentStep === 1) {
     return (
@@ -399,7 +338,7 @@ export default function OnboardingPage() {
             </Card>
           </div>
         </div>
-        <div id="recaptcha-container"></div>
+
       </div>
     );
   }
@@ -415,8 +354,8 @@ export default function OnboardingPage() {
               <Mail className="text-black text-2xl" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Verify Your Email</h2>
-            <p className="text-gray-400 text-sm">Demo Mode: Use verification code</p>
-            <p className="text-bellu-primary font-medium text-xl">123456</p>
+            <p className="text-gray-400 text-sm">We've sent a 6-digit code to {formData?.email}</p>
+            <p className="text-bellu-primary font-medium text-sm">Check your inbox and enter the code below</p>
           </div>
 
           <div className="gradient-border">
@@ -433,7 +372,7 @@ export default function OnboardingPage() {
                   <p className="text-gray-400 text-sm mb-3">Didn't receive the code?</p>
                   <Button
                     variant="ghost"
-                    onClick={startEmailVerification}
+                    onClick={() => startEmailVerification()}
                     className="text-bellu-primary hover:text-bellu-gold"
                   >
                     Resend Code
@@ -458,59 +397,7 @@ export default function OnboardingPage() {
     );
   }
 
-  if (currentStep === 3) {
-    return (
-      <div className="min-h-screen text-white">
-        <div className="max-w-md mx-auto px-4 py-12">
-          <ProgressIndicator currentStep={currentStep} />
-          
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-r from-bellu-primary to-bellu-gold rounded-full flex items-center justify-center mx-auto mb-4">
-              <Phone className="text-black text-2xl" />
-            </div>
-            <h2 className="text-2xl font-bold mb-2">Verify Your Phone</h2>
-            <p className="text-gray-400 text-sm">Demo Mode: Use verification code</p>
-            <p className="text-bellu-primary font-medium text-xl">123456</p>
-          </div>
 
-          <div className="gradient-border">
-            <Card className="gradient-border-content bg-bellu-dark border-none">
-              <CardContent className="p-6">
-                <div className="space-y-6">
-                  <div>
-                    <Label className="block text-sm font-medium mb-3">Enter 6-digit SMS code</Label>
-                    <OTPInput onComplete={handlePhoneVerification} />
-                  </div>
-                </div>
-
-                <div className="mt-6 text-center">
-                  <p className="text-gray-400 text-sm mb-3">Didn't receive the SMS?</p>
-                  <Button
-                    variant="ghost"
-                    onClick={startPhoneVerification}
-                    className="text-bellu-primary hover:text-bellu-gold"
-                  >
-                    Resend SMS
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="mt-6 text-center">
-            <Button
-              variant="ghost"
-              onClick={() => setCurrentStep(2)}
-              className="text-gray-400 hover:text-white"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Email Verification
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return null;
 }

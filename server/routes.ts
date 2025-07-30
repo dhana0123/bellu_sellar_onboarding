@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertSellerSchema } from "@shared/schema";
 import { z } from "zod";
+import { sendEmail, generateOTP, generateVerificationEmail } from "./email";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Create seller endpoint
@@ -31,21 +32,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update seller verification status
-  app.patch("/api/sellers/:id/verification", async (req, res) => {
+  // Send email verification
+  app.post("/api/sellers/:id/send-verification", async (req, res) => {
     try {
-      const { emailVerified, phoneVerified } = req.body;
-      const seller = await storage.updateSellerVerification(
-        req.params.id,
-        emailVerified,
-        phoneVerified
-      );
+      const seller = await storage.getSellerById(req.params.id);
       if (!seller) {
         return res.status(404).json({ success: false, error: "Seller not found" });
       }
-      res.json({ success: true, seller });
+
+      const otp = generateOTP();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+      // Store the OTP token
+      await storage.createEmailToken({
+        email: seller.email,
+        token: otp,
+        expiresAt,
+      });
+
+      // Send verification email
+      const { subject, htmlContent } = generateVerificationEmail(otp, seller.brandName);
+      const emailResult = await sendEmail({
+        to: seller.email,
+        subject,
+        htmlContent,
+      });
+
+      if (!emailResult.success) {
+        return res.status(500).json({ success: false, error: "Failed to send verification email" });
+      }
+
+      res.json({ success: true, message: "Verification email sent" });
     } catch (error) {
-      console.error("Error updating verification:", error);
+      console.error("Error sending verification email:", error);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    }
+  });
+
+  // Verify email with OTP
+  app.post("/api/sellers/:id/verify-email", async (req, res) => {
+    try {
+      const { otp } = req.body;
+      const seller = await storage.getSellerById(req.params.id);
+      
+      if (!seller) {
+        return res.status(404).json({ success: false, error: "Seller not found" });
+      }
+
+      // Check if OTP is valid
+      const emailToken = await storage.getEmailToken(seller.email, otp);
+      if (!emailToken) {
+        return res.status(400).json({ success: false, error: "Invalid or expired verification code" });
+      }
+
+      // Update seller verification status
+      const updatedSeller = await storage.updateSellerVerification(req.params.id, true);
+      
+      // Delete the used token
+      await storage.deleteEmailToken(seller.email);
+
+      res.json({ success: true, seller: updatedSeller });
+    } catch (error) {
+      console.error("Error verifying email:", error);
       res.status(500).json({ success: false, error: "Internal server error" });
     }
   });
