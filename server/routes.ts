@@ -118,6 +118,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Delete the used token
       await storage.deleteEmailToken(seller.email);
 
+      // Store seller ID in session
+      (req.session as any).sellerId = req.params.id;
+
       res.json({ success: true, seller: updatedSeller });
     } catch (error) {
       console.error("Error verifying email:", error);
@@ -135,6 +138,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true, valid: true, seller: { id: seller.id, brandName: seller.brandName } });
     } catch (error) {
       console.error("Error verifying API key:", error);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    }
+  });
+
+  // Session management endpoints
+  app.get("/api/session", async (req, res) => {
+    try {
+      const sellerId = (req.session as any)?.sellerId;
+      if (!sellerId) {
+        return res.json({ success: true, authenticated: false });
+      }
+
+      const seller = await storage.getSellerById(sellerId);
+      if (!seller) {
+        // Clear invalid session
+        (req.session as any).sellerId = null;
+        return res.json({ success: true, authenticated: false });
+      }
+
+      res.json({ 
+        success: true, 
+        authenticated: true, 
+        seller
+      });
+    } catch (error) {
+      console.error("Error checking session:", error);
+      res.status(500).json({ success: false, error: "Internal server error" });
+    }
+  });
+
+  app.post("/api/logout", (req, res) => {
+    try {
+      req.session.destroy((err) => {
+        if (err) {
+          console.error("Error destroying session:", err);
+          return res.status(500).json({ success: false, error: "Failed to logout" });
+        }
+        res.clearCookie('connect.sid');  // Clear the session cookie
+        res.json({ success: true, message: "Logged out successfully" });
+      });
+    } catch (error) {
+      console.error("Error during logout:", error);
       res.status(500).json({ success: false, error: "Internal server error" });
     }
   });

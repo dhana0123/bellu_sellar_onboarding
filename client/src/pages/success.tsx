@@ -1,25 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Check, Copy, Book, Download, Calendar, Building, Key, Rocket, ArrowLeft, Phone } from 'lucide-react';
+import { Check, Copy, Book, Download, Calendar, Building, Key, Rocket, ArrowLeft, Phone, LogOut } from 'lucide-react';
+import { apiRequest } from '@/lib/queryClient';
 
 export default function SuccessPage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const [sellerId] = useState(() => {
-    // In a real app, you'd get this from route params or state
-    return new URLSearchParams(window.location.search).get('sellerId') || '';
+  const queryClient = useQueryClient();
+
+  // Check session to get current authenticated seller
+  const { data: sessionData, isLoading: sessionLoading } = useQuery({
+    queryKey: ['/api/session'],
   });
 
-  const { data: sellerData, isLoading } = useQuery({
-    queryKey: ['/api/sellers', sellerId],
-    enabled: !!sellerId,
-  });
+  const session = (sessionData as any);
+  const seller = session?.seller;
 
-  const seller = (sellerData as any)?.seller;
+  // Logout mutation
+  const logoutMutation = useMutation({
+    mutationFn: () => apiRequest('/api/logout', { method: 'POST' }),
+    onSuccess: () => {
+      toast({
+        title: 'Logged out',
+        description: 'You have been successfully logged out',
+      });
+      // Invalidate session cache and redirect
+      queryClient.invalidateQueries({ queryKey: ['/api/session'] });
+      setLocation('/');
+    },
+    onError: () => {
+      toast({
+        title: 'Error',
+        description: 'Failed to logout',
+        variant: 'destructive',
+      });
+    },
+  });
 
   const handleCopyToClipboard = async (text: string, label: string) => {
     try {
@@ -118,7 +138,11 @@ export default function SuccessPage() {
     window.open('https://calendly.com/bellu-kart/integration-call', '_blank');
   };
 
-  if (isLoading) {
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
+
+  if (sessionLoading) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
@@ -129,11 +153,12 @@ export default function SuccessPage() {
     );
   }
 
-  if (!seller) {
+  if (!session?.authenticated || !seller) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Seller Not Found</h1>
+          <h1 className="text-2xl font-bold mb-4">Please Login</h1>
+          <p className="text-gray-400 mb-4">You need to complete the onboarding process first</p>
           <Button onClick={() => setLocation('/')}>Go to Onboarding</Button>
         </div>
       </div>
@@ -143,6 +168,24 @@ export default function SuccessPage() {
   return (
     <div className="min-h-screen text-white">
       <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* Header with Logout */}
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center space-x-3">
+            <h2 className="text-2xl font-bold">Dashboard</h2>
+            <span className="text-gray-400">•</span>
+            <span className="text-bellu-primary">{seller.brandName}</span>
+          </div>
+          <Button 
+            onClick={handleLogout}
+            variant="ghost"
+            className="text-gray-400 hover:text-white"
+            disabled={logoutMutation.isPending}
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+          </Button>
+        </div>
+
         {/* Success Animation */}
         <div className="text-center mb-12 animate-fade-in">
           <div className="w-24 h-24 bg-gradient-to-r from-bellu-primary to-bellu-gold rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
@@ -170,12 +213,13 @@ export default function SuccessPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-400 mb-2">API Key</label>
                     <div className="flex items-center bg-bellu-darker border border-bellu-gray rounded-lg p-3">
-                      <code className="flex-1 text-bellu-primary font-mono text-sm">{seller.apiKey}</code>
+                      <code className="flex-1 text-bellu-primary font-mono text-sm">{seller.apiKey || 'Loading...'}</code>
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleCopyToClipboard(seller.apiKey, 'API Key')}
+                        onClick={() => handleCopyToClipboard(seller.apiKey || '', 'API Key')}
                         className="ml-3 p-2 text-gray-400 hover:text-bellu-primary"
+                        disabled={!seller.apiKey}
                       >
                         <Copy className="w-4 h-4" />
                       </Button>
