@@ -17,7 +17,7 @@ export async function sendEmail(params: EmailParams): Promise<{ success: boolean
     sendSmtpEmail.subject = params.subject;
     sendSmtpEmail.htmlContent = params.htmlContent;
     sendSmtpEmail.textContent = params.textContent || params.htmlContent.replace(/<[^>]*>/g, '');
-    sendSmtpEmail.sender = { name: 'Bellu Kart', email: 'noreply@bellukart.com' };
+    sendSmtpEmail.sender = { name: 'Bellu Kart', email: 'noreply@bellu.ai' };
     sendSmtpEmail.to = [{ email: params.to }];
 
     await apiInstance.sendTransacEmail(sendSmtpEmail);
