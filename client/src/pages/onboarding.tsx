@@ -220,7 +220,7 @@ export default function OnboardingPage() {
             <p className="text-sm text-gray-400">No storefront needed • Keep your existing website • Instant integration</p>
           </div>
 
-          <Card className="bg-gray-900 border border-gray-700">
+          <Card className="bg-black border border-gray-600">
             <CardContent className="p-8">
               <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
                 <div className="relative">
@@ -372,7 +372,7 @@ export default function OnboardingPage() {
             <p className="text-white font-medium text-sm">Check your inbox and enter the code below</p>
           </div>
 
-          <Card className="bg-gray-900 border border-gray-700">
+          <Card className="bg-black border border-gray-600">
             <CardContent className="p-6">
               <div className="space-y-6">
                 <div>

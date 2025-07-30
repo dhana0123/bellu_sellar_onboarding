@@ -5,50 +5,50 @@
 :root {
   --background: hsl(0, 0%, 0%);
   --foreground: hsl(0, 0%, 100%);
-  --muted: hsl(0, 0%, 20%);
+  --muted: hsl(0, 0%, 0%);
   --muted-foreground: hsl(0, 0%, 60%);
-  --popover: hsl(0, 0%, 10%);
+  --popover: hsl(0, 0%, 0%);
   --popover-foreground: hsl(0, 0%, 100%);
-  --card: hsl(0, 0%, 10%);
+  --card: hsl(0, 0%, 0%);
   --card-foreground: hsl(0, 0%, 100%);
-  --border: hsl(0, 0%, 20%);
-  --input: hsl(0, 0%, 20%);
+  --border: hsl(0, 0%, 25%);
+  --input: hsl(0, 0%, 0%);
   --primary: hsl(0, 0%, 100%);
   --primary-foreground: hsl(0, 0%, 0%);
-  --secondary: hsl(0, 0%, 20%);
+  --secondary: hsl(0, 0%, 0%);
   --secondary-foreground: hsl(0, 0%, 100%);
-  --accent: hsl(0, 0%, 20%);
+  --accent: hsl(0, 0%, 0%);
   --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(0, 0%, 98%);
   --ring: hsl(0, 0%, 100%);
   --radius: 0.5rem;
   
-  /* Bellu tech company colors - clean and professional */
+  /* Bellu tech company colors - pure black and white theme */
   --bellu-primary: hsl(0, 0%, 100%);
   --bellu-secondary: hsl(0, 0%, 90%);
-  --bellu-dark: hsl(0, 0%, 10%);
-  --bellu-darker: hsl(0, 0%, 6%);
-  --bellu-gray: hsl(0, 0%, 20%);
+  --bellu-dark: hsl(0, 0%, 0%);
+  --bellu-darker: hsl(0, 0%, 0%);
+  --bellu-gray: hsl(0, 0%, 25%);
   --bellu-light-gray: hsl(0, 0%, 40%);
 }
 
 .dark {
   --background: hsl(0, 0%, 0%);
   --foreground: hsl(0, 0%, 100%);
-  --muted: hsl(0, 0%, 20%);
+  --muted: hsl(0, 0%, 0%);
   --muted-foreground: hsl(0, 0%, 60%);
-  --popover: hsl(0, 0%, 10%);
+  --popover: hsl(0, 0%, 0%);
   --popover-foreground: hsl(0, 0%, 100%);
-  --card: hsl(0, 0%, 10%);
+  --card: hsl(0, 0%, 0%);
   --card-foreground: hsl(0, 0%, 100%);
-  --border: hsl(0, 0%, 20%);
-  --input: hsl(0, 0%, 20%);
+  --border: hsl(0, 0%, 25%);
+  --input: hsl(0, 0%, 0%);
   --primary: hsl(0, 0%, 100%);
   --primary-foreground: hsl(0, 0%, 0%);
-  --secondary: hsl(0, 0%, 20%);
+  --secondary: hsl(0, 0%, 0%);
   --secondary-foreground: hsl(0, 0%, 100%);
-  --accent: hsl(0, 0%, 20%);
+  --accent: hsl(0, 0%, 0%);
   --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);

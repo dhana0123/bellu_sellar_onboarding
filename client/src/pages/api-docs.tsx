@@ -37,7 +37,7 @@ export default function ApiDocsPage() {
           {/* Navigation Sidebar */}
           <div className="lg:col-span-1">
             <div className="gradient-border sticky top-24">
-              <Card className="gradient-border-content bg-bellu-dark border-none">
+              <Card className="gradient-border-content bg-black border-none">
                 <CardContent className="p-4">
                   <h3 className="font-semibold mb-4">Documentation</h3>
                   <nav className="space-y-2 text-sm">
@@ -58,7 +58,7 @@ export default function ApiDocsPage() {
           <div className="lg:col-span-3 space-y-8">
             {/* Getting Started */}
             <section id="getting-started" className="gradient-border">
-              <Card className="gradient-border-content bg-bellu-dark border-none">
+              <Card className="gradient-border-content bg-black border-none">
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-semibold mb-4 flex items-center">
                     <Book className="text-bellu-primary mr-3" />
@@ -91,7 +91,7 @@ export default function ApiDocsPage() {
 
             {/* Authentication */}
             <section id="authentication" className="gradient-border">
-              <Card className="gradient-border-content bg-bellu-dark border-none">
+              <Card className="gradient-border-content bg-black border-none">
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-semibold mb-4 flex items-center">
                     <Lock className="text-bellu-gold mr-3" />
@@ -127,7 +127,7 @@ export default function ApiDocsPage() {
 
             {/* Webhooks */}
             <section id="webhooks" className="gradient-border">
-              <Card className="gradient-border-content bg-bellu-dark border-none">
+              <Card className="gradient-border-content bg-black border-none">
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-semibold mb-4 flex items-center">
                     <Plug className="text-bellu-primary mr-3" />
@@ -205,7 +205,7 @@ export default function ApiDocsPage() {
 
             {/* Code Examples */}
             <section id="examples" className="gradient-border">
-              <Card className="gradient-border-content bg-bellu-dark border-none">
+              <Card className="gradient-border-content bg-black border-none">
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-semibold mb-4 flex items-center">
                     <Code className="text-bellu-primary mr-3" />
@@ -288,7 +288,7 @@ app.run(port=3000)`}
 
             {/* Support */}
             <section id="support" className="gradient-border">
-              <Card className="gradient-border-content bg-bellu-dark border-none">
+              <Card className="gradient-border-content bg-black border-none">
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-semibold mb-4 flex items-center">
                     <Phone className="text-bellu-primary mr-3" />
