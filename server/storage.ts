@@ -217,11 +217,13 @@ export class MongoStorage implements IStorage {
 
   async authenticateSeller(email: string, password: string): Promise<SellerType | undefined> {
     const seller = await Seller.findOne({ email });
+    
     if (!seller || !seller.password) {
       return undefined;
     }
     
     const isValidPassword = await bcrypt.compare(password, seller.password);
+    
     if (!isValidPassword) {
       return undefined;
     }

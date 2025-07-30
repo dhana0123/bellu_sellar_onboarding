@@ -12,6 +12,7 @@ const insertSellerSchema = z.object({
   phone: z.string(),
   category: z.string().min(1),
   monthlyOrders: z.string().optional(),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -128,6 +129,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ success: false, error: "Internal server error" });
     }
   });
+
+
 
   // Verify API key endpoint
   app.get("/api/verify-key/:apiKey", async (req, res) => {

@@ -20,6 +20,11 @@ app.use(session({
   }
 }));
 
+// API middleware
+app.use('/api', (req, res, next) => {
+  next();
+});
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
