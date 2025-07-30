@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a production-ready full-stack web application built for Bellu Kart's seller onboarding platform. The application allows D2C brands to activate Bellu Kart's 10-minute delivery infrastructure without creating a storefront. It features a modern React frontend with a Node.js/Express backend, PostgreSQL database integration via Drizzle ORM, and Firebase integration for email and phone verification services.
+This is a production-ready full-stack web application built for Bellu Kart's seller onboarding platform. The application allows D2C brands to activate Bellu Kart's 10-minute delivery infrastructure without creating a storefront. It features a modern React frontend with a Node.js/Express backend, MongoDB database integration via Mongoose, and Brevo email verification service.
 
 **Current Status**: ✅ Complete with email verification flow using Brevo, premium dark UI (Ola/Uber-inspired), and simplified 2-step onboarding process.
 
@@ -24,9 +24,9 @@ Preferred communication style: Simple, everyday language.
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js framework
 - **Language**: TypeScript with ES modules
-- **Database ORM**: Drizzle ORM for type-safe database operations
-- **Database**: PostgreSQL (configured for Neon serverless)
-- **Session Management**: Connect-pg-simple for PostgreSQL-backed sessions
+- **Database ODM**: Mongoose for MongoDB integration
+- **Database**: MongoDB with connection pooling and caching
+- **Session Management**: Memory-based sessions for development
 - **Development**: tsx for TypeScript execution in development
 
 ### Authentication & Verification
@@ -34,19 +34,18 @@ Preferred communication style: Simple, everyday language.
 - **OTP System**: 6-digit email verification codes with 10-minute expiration
 - **Verification Flow**: 2-step process: Details → Email Verification → Success
 - **Email Service**: Real email delivery via Brevo API with branded templates
-- **Database Storage**: Email verification tokens stored in PostgreSQL with expiration
+- **Database Storage**: Email verification tokens stored in MongoDB with automatic expiration
 
 ## Key Components
 
-### Database Schema (`shared/schema.ts`)
-- **Users Table**: Basic user authentication with username/password
-- **Sellers Table**: Comprehensive seller information including:
+### Database Schema (`server/models.ts`)
+- **Sellers Collection**: Comprehensive seller information including:
   - Brand details (name, website, category)
   - Contact information (email, phone)
   - Business metrics (monthly orders)
   - API credentials (unique API keys)
   - Verification status (email verification timestamp)
-- **Email Verification Tokens Table**: Temporary OTP storage with expiration
+- **Email Verification Tokens Collection**: Temporary OTP storage with automatic expiration via MongoDB TTL indexes
 
 ### Frontend Pages
 - **Navigation Bar**: Fixed navbar with Bellu Kart branding and page navigation
@@ -77,20 +76,20 @@ Preferred communication style: Simple, everyday language.
    - Postman collection available for download
 
 3. **Database Operations**:
-   - All seller data persisted to PostgreSQL
-   - Drizzle ORM ensures type safety
-   - Migrations managed through drizzle-kit
+   - All seller data persisted to MongoDB
+   - Mongoose ODM ensures data validation and type safety
+   - Automatic schema indexing and TTL for token expiration
 
 ## External Dependencies
 
 ### Core Dependencies
-- **Database**: Neon PostgreSQL serverless database
+- **Database**: MongoDB with Mongoose ODM
 - **Email Service**: Brevo (formerly Sendinblue) for email verification
 - **UI Components**: Radix UI primitives with shadcn/ui styling
 - **Validation**: Zod for runtime type checking and form validation
 
 ### Development Tools
-- **Drizzle Kit**: Database migrations and schema management
+- **Mongoose**: MongoDB object modeling and validation
 - **ESBuild**: Production bundling for server code
 - **PostCSS**: CSS processing with Autoprefixer
 
@@ -105,17 +104,17 @@ Preferred communication style: Simple, everyday language.
 ### Build Process
 - **Frontend**: Vite builds React app to `dist/public`
 - **Backend**: ESBuild bundles server code to `dist/index.js`
-- **Database**: Drizzle migrations applied via `npm run db:push`
+- **Database**: MongoDB connection established automatically on startup
 
 ### Environment Configuration
 - **Development**: Local development with tsx and Vite dev server
 - **Production**: Node.js server serving static assets and API routes
-- **Database**: CONNECTION_STRING required for PostgreSQL connection
+- **Database**: MONGODB_URI required for MongoDB connection
 
 ### Key Scripts
 - `npm run dev`: Start development server with hot reload
 - `npm run build`: Build production assets
 - `npm run start`: Start production server
-- `npm run db:push`: Apply database schema changes
+- Database schemas are automatically synced via Mongoose models
 
-The application is designed to be deployed on platforms like Replit, with appropriate environment variable configuration for database connections and Firebase credentials.
+The application is designed to be deployed on platforms like Replit, with appropriate environment variable configuration for MongoDB connections and Brevo email service credentials.

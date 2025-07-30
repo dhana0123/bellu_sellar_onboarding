@@ -1,9 +1,17 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { insertSellerSchema } from "@shared/schema";
+import { storage } from "./storage-mongo";
 import { z } from "zod";
 import { sendEmail, generateOTP, generateVerificationEmail } from "./email";
+
+const insertSellerSchema = z.object({
+  brandName: z.string().min(1),
+  websiteUrl: z.string().url(),
+  email: z.string().email(),
+  phone: z.string(),
+  category: z.string().min(1),
+  monthlyOrders: z.string().optional(),
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Create seller endpoint
