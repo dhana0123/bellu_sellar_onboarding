@@ -12,17 +12,34 @@ export default function SuccessPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Get seller ID from URL params as fallback
+  const [sellerId] = useState(() => {
+    return new URLSearchParams(window.location.search).get('sellerId') || '';
+  });
+
   // Check session to get current authenticated seller
   const { data: sessionData, isLoading: sessionLoading } = useQuery({
     queryKey: ['/api/session'],
   });
 
+  // Get seller by ID if we have sellerId but no session
+  const { data: sellerData, isLoading: sellerLoading } = useQuery({
+    queryKey: ['/api/sellers', sellerId],
+    enabled: !!sellerId && !(sessionData as any)?.authenticated,
+  });
+
   const session = (sessionData as any);
-  const seller = session?.seller;
+  const seller = session?.seller || (sellerData as any)?.seller;
 
   // Logout mutation
   const logoutMutation = useMutation({
-    mutationFn: () => apiRequest('/api/logout', { method: 'POST' }),
+    mutationFn: () => fetch('/api/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    }).then(res => res.json()),
     onSuccess: () => {
       toast({
         title: 'Logged out',
@@ -142,7 +159,7 @@ export default function SuccessPage() {
     logoutMutation.mutate();
   };
 
-  if (sessionLoading) {
+  if (sessionLoading || sellerLoading) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
@@ -153,11 +170,11 @@ export default function SuccessPage() {
     );
   }
 
-  if (!session?.authenticated || !seller) {
+  if (!seller) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Please Login</h1>
+          <h1 className="text-2xl font-bold mb-4">Seller Not Found</h1>
           <p className="text-gray-400 mb-4">You need to complete the onboarding process first</p>
           <Button onClick={() => setLocation('/')}>Go to Onboarding</Button>
         </div>

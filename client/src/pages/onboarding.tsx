@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -89,6 +89,17 @@ export default function OnboardingPage() {
   const [sellerId, setSellerId] = useState<string>('');
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+
+  // Check if user is already authenticated and redirect to success page
+  const { data: sessionData } = useQuery({
+    queryKey: ['/api/session'],
+  });
+
+  useEffect(() => {
+    if ((sessionData as any)?.authenticated) {
+      setLocation('/success');
+    }
+  }, [sessionData, setLocation]);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),

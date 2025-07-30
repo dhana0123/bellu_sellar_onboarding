@@ -33,7 +33,7 @@ export class MemStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<UserType | undefined> {
-    for (const user of this.users.values()) {
+    for (const user of Array.from(this.users.values())) {
       if (user.username === username) {
         return user;
       }
@@ -83,7 +83,7 @@ export class MemStorage implements IStorage {
   }
 
   async getSellerByEmail(email: string): Promise<SellerType | undefined> {
-    for (const seller of this.sellers.values()) {
+    for (const seller of Array.from(this.sellers.values())) {
       if (seller.email === email) {
         return seller;
       }
@@ -92,7 +92,7 @@ export class MemStorage implements IStorage {
   }
 
   async getSellerByApiKey(apiKey: string): Promise<SellerType | undefined> {
-    for (const seller of this.sellers.values()) {
+    for (const seller of Array.from(this.sellers.values())) {
       if (seller.apiKey === apiKey) {
         return seller;
       }
