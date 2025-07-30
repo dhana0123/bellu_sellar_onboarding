@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { OTPInput } from '@/components/ui/otp-input';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
-import { Loader2, Mail, Check, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Loader2, Mail, Check, ArrowLeft, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
   brandName: z.string().min(1, 'Brand name is required'),
@@ -21,6 +21,7 @@ const formSchema = z.object({
   phone: z.string().regex(/^[6-9]\d{9}$/, 'Please enter a valid 10-digit mobile number'),
   category: z.string().min(1, 'Please select a category'),
   monthlyOrders: z.string().optional(),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -87,6 +88,7 @@ export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [sellerId, setSellerId] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
@@ -110,6 +112,7 @@ export default function OnboardingPage() {
       phone: '',
       category: '',
       monthlyOrders: '',
+      password: '',
     },
   });
 
@@ -316,6 +319,34 @@ export default function OnboardingPage() {
                       <SelectItem value="5000+">5,000+ orders</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="relative">
+                  <Label htmlFor="password" className="text-gray-400">Password *</Label>
+                  <div className="relative mt-2">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      {...form.register('password')}
+                      className="bg-black border-gray-600 focus:border-white pr-10"
+                      placeholder="Create a secure password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                  {form.formState.errors.password && (
+                    <p className="text-red-400 text-sm mt-1">{form.formState.errors.password.message}</p>
+                  )}
+                  <p className="text-gray-500 text-xs mt-1">You'll use this to log in to your dashboard</p>
                 </div>
 
                 <Button

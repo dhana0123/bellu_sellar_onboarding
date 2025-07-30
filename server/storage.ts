@@ -4,9 +4,11 @@ import {
   type EmailTokenType,
   type InsertUser, 
   type InsertSeller, 
-  type InsertEmailToken 
+  type InsertEmailToken,
+  type LoginRequest 
 } from "@shared/schema";
 import { randomUUID } from "crypto";
+import bcrypt from 'bcryptjs';
 import { User, Seller, EmailToken } from './models';
 
 export interface IStorage {
@@ -19,6 +21,8 @@ export interface IStorage {
   getSellerByApiKey(apiKey: string): Promise<SellerType | undefined>;
   updateSellerVerification(id: string, emailVerified?: boolean): Promise<SellerType | undefined>;
   updateSellerApiKey(id: string, apiKey: string): Promise<SellerType | undefined>;
+  updateSellerPassword(id: string, password: string): Promise<SellerType | undefined>;
+  authenticateSeller(email: string, password: string): Promise<SellerType | undefined>;
   createEmailToken(token: InsertEmailToken): Promise<EmailTokenType>;
   getEmailToken(email: string, token: string): Promise<EmailTokenType | undefined>;
   deleteEmailToken(email: string): Promise<void>;
@@ -61,8 +65,16 @@ export class MongoStorage implements IStorage {
 
   async createSeller(insertSeller: InsertSeller): Promise<SellerType> {
     const apiKey = `bk_seller_${randomUUID().replace(/-/g, '').substring(0, 16)}`;
+    
+    // Hash password if provided
+    let hashedPassword;
+    if (insertSeller.password) {
+      hashedPassword = await bcrypt.hash(insertSeller.password, 10);
+    }
+    
     const seller = new Seller({
       ...insertSeller,
+      password: hashedPassword,
       apiKey,
       isActive: 1,
     });
@@ -75,6 +87,7 @@ export class MongoStorage implements IStorage {
       phone: savedSeller.phone,
       category: savedSeller.category,
       monthlyOrders: savedSeller.monthlyOrders,
+      password: savedSeller.password,
       apiKey: savedSeller.apiKey,
       emailVerified: savedSeller.emailVerified,
       isActive: savedSeller.isActive,
@@ -93,6 +106,7 @@ export class MongoStorage implements IStorage {
       phone: seller.phone,
       category: seller.category,
       monthlyOrders: seller.monthlyOrders,
+      password: seller.password,
       apiKey: seller.apiKey,
       emailVerified: seller.emailVerified,
       isActive: seller.isActive,
@@ -111,6 +125,7 @@ export class MongoStorage implements IStorage {
       phone: seller.phone,
       category: seller.category,
       monthlyOrders: seller.monthlyOrders,
+      password: seller.password,
       apiKey: seller.apiKey,
       emailVerified: seller.emailVerified,
       isActive: seller.isActive,
@@ -129,6 +144,7 @@ export class MongoStorage implements IStorage {
       phone: seller.phone,
       category: seller.category,
       monthlyOrders: seller.monthlyOrders,
+      password: seller.password,
       apiKey: seller.apiKey,
       emailVerified: seller.emailVerified,
       isActive: seller.isActive,
@@ -151,6 +167,7 @@ export class MongoStorage implements IStorage {
       phone: seller.phone,
       category: seller.category,
       monthlyOrders: seller.monthlyOrders,
+      password: seller.password,
       apiKey: seller.apiKey,
       emailVerified: seller.emailVerified,
       isActive: seller.isActive,
@@ -169,12 +186,61 @@ export class MongoStorage implements IStorage {
       phone: seller.phone,
       category: seller.category,
       monthlyOrders: seller.monthlyOrders,
+      password: seller.password,
       apiKey: seller.apiKey,
       emailVerified: seller.emailVerified,
       isActive: seller.isActive,
       createdAt: seller.createdAt,
       updatedAt: seller.updatedAt,
     } : undefined;
+  }
+
+  async updateSellerPassword(id: string, password: string): Promise<SellerType | undefined> {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const seller = await Seller.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
+    return seller ? {
+      id: seller._id.toString(),
+      brandName: seller.brandName,
+      websiteUrl: seller.websiteUrl,
+      email: seller.email,
+      phone: seller.phone,
+      category: seller.category,
+      monthlyOrders: seller.monthlyOrders,
+      password: seller.password,
+      apiKey: seller.apiKey,
+      emailVerified: seller.emailVerified,
+      isActive: seller.isActive,
+      createdAt: seller.createdAt,
+      updatedAt: seller.updatedAt,
+    } : undefined;
+  }
+
+  async authenticateSeller(email: string, password: string): Promise<SellerType | undefined> {
+    const seller = await Seller.findOne({ email });
+    if (!seller || !seller.password) {
+      return undefined;
+    }
+    
+    const isValidPassword = await bcrypt.compare(password, seller.password);
+    if (!isValidPassword) {
+      return undefined;
+    }
+    
+    return {
+      id: seller._id.toString(),
+      brandName: seller.brandName,
+      websiteUrl: seller.websiteUrl,
+      email: seller.email,
+      phone: seller.phone,
+      category: seller.category,
+      monthlyOrders: seller.monthlyOrders,
+      password: seller.password,
+      apiKey: seller.apiKey,
+      emailVerified: seller.emailVerified,
+      isActive: seller.isActive,
+      createdAt: seller.createdAt,
+      updatedAt: seller.updatedAt,
+    };
   }
 
   async createEmailToken(insertToken: InsertEmailToken): Promise<EmailTokenType> {
@@ -247,6 +313,12 @@ export class MemStorage implements IStorage {
     const apiKey = `bk_seller_${randomUUID().replace(/-/g, '').substring(0, 16)}`;
     const now = new Date();
     
+    // Hash password if provided
+    let hashedPassword;
+    if (insertSeller.password) {
+      hashedPassword = await bcrypt.hash(insertSeller.password, 10);
+    }
+    
     const seller: SellerType = {
       id,
       brandName: insertSeller.brandName,
@@ -255,6 +327,7 @@ export class MemStorage implements IStorage {
       phone: insertSeller.phone,
       category: insertSeller.category,
       monthlyOrders: insertSeller.monthlyOrders,
+      password: hashedPassword,
       apiKey,
       emailVerified: undefined,
       isActive: 1,
@@ -304,6 +377,31 @@ export class MemStorage implements IStorage {
     seller.apiKey = apiKey;
     seller.updatedAt = new Date();
     this.sellers.set(id, seller);
+    return seller;
+  }
+
+  async updateSellerPassword(id: string, password: string): Promise<SellerType | undefined> {
+    const seller = this.sellers.get(id);
+    if (!seller) return undefined;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    seller.password = hashedPassword;
+    seller.updatedAt = new Date();
+    this.sellers.set(id, seller);
+    return seller;
+  }
+
+  async authenticateSeller(email: string, password: string): Promise<SellerType | undefined> {
+    const seller = await this.getSellerByEmail(email);
+    if (!seller || !seller.password) {
+      return undefined;
+    }
+    
+    const isValidPassword = await bcrypt.compare(password, seller.password);
+    if (!isValidPassword) {
+      return undefined;
+    }
+    
     return seller;
   }
 

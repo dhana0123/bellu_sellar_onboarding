@@ -17,6 +17,7 @@ const sellerSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   category: { type: String, required: true },
   monthlyOrders: { type: String },
+  password: { type: String },
   apiKey: { type: String, required: true, unique: true },
   emailVerified: { type: Date },
   isActive: { type: Number, default: 1 },

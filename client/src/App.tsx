@@ -7,12 +7,14 @@ import Navbar from "@/components/navbar";
 import OnboardingPage from "@/pages/onboarding";
 import SuccessPage from "@/pages/success";
 import ApiDocsPage from "@/pages/api-docs";
+import LoginPage from "@/pages/login";
 import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={OnboardingPage} />
+      <Route path="/login" component={LoginPage} />
       <Route path="/success" component={SuccessPage} />
       <Route path="/api-docs" component={ApiDocsPage} />
       <Route component={NotFound} />

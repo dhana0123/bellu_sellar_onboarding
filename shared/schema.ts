@@ -13,6 +13,12 @@ export const insertSellerSchema = z.object({
   phone: z.string().regex(/^[6-9]\d{9}$/, 'Please enter a valid 10-digit mobile number'),
   category: z.string().min(1, 'Please select a category'),
   monthlyOrders: z.string().optional(),
+  password: z.string().min(6, 'Password must be at least 6 characters').optional(),
+});
+
+export const loginSchema = z.object({
+  email: z.string().email('Please enter a valid email'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 export const insertEmailTokenSchema = z.object({
@@ -32,6 +38,7 @@ export type UserType = {
 };
 
 export type InsertSeller = z.infer<typeof insertSellerSchema>;
+export type LoginRequest = z.infer<typeof loginSchema>;
 export type SellerType = {
   id: string;
   brandName: string;
@@ -40,6 +47,7 @@ export type SellerType = {
   phone: string;
   category: string;
   monthlyOrders?: string;
+  password?: string;
   apiKey: string;
   emailVerified?: Date;
   isActive: number;

@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import { sendEmail, generateOTP, generateVerificationEmail } from "./email";
+import { loginSchema } from "@shared/schema";
 
 const insertSellerSchema = z.object({
   brandName: z.string().min(1),
@@ -142,6 +143,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Login endpoint
+  app.post("/api/login", async (req, res) => {
+    try {
+      const validatedData = loginSchema.parse(req.body);
+      
+      const seller = await storage.authenticateSeller(validatedData.email, validatedData.password);
+      if (!seller) {
+        return res.status(401).json({ 
+          success: false, 
+          error: "Invalid email or password" 
+        });
+      }
+
+      // Store seller ID in session
+      (req.session as any).sellerId = seller.id;
+      
+      // Return seller data without password
+      const { password, ...sellerData } = seller;
+      res.json({ 
+        success: true, 
+        authenticated: true, 
+        seller: sellerData 
+      });
+    } catch (error: any) {
+      console.error("Error during login:", error);
+      if (error.issues) {
+        return res.status(400).json({ 
+          success: false, 
+          error: "Invalid login data" 
+        });
+      }
+      res.status(500).json({ success: false, error: "Internal server error" });
+    }
+  });
+
   // Session management endpoints
   app.get("/api/session", async (req, res) => {
     try {
@@ -157,10 +193,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({ success: true, authenticated: false });
       }
 
+      // Return seller data without password
+      const { password, ...sellerData } = seller;
       res.json({ 
         success: true, 
         authenticated: true, 
-        seller
+        seller: sellerData
       });
     } catch (error) {
       console.error("Error checking session:", error);
