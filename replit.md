@@ -24,10 +24,16 @@ Preferred communication style: Simple, everyday language.
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js framework
 - **Language**: TypeScript with ES modules
-- **Database ODM**: Mongoose for MongoDB integration
-- **Database**: MongoDB with connection pooling and caching
+- **Database ORM**: Drizzle ORM for PostgreSQL integration
+- **Database**: PostgreSQL with connection pooling (migrated from MongoDB)
 - **Session Management**: Memory-based sessions for development
 - **Development**: tsx for TypeScript execution in development
+
+### Migration Notes
+- **Original Database**: MongoDB with Mongoose ODM
+- **Current Database**: PostgreSQL with Drizzle ORM
+- **Migration Date**: 2025-01-30
+- **Reason**: Replit environment compatibility and enhanced type safety
 
 ### Authentication & Verification
 - **Brevo Integration**: Used for email verification with 300 free emails/day
@@ -38,14 +44,15 @@ Preferred communication style: Simple, everyday language.
 
 ## Key Components
 
-### Database Schema (`server/models.ts`)
-- **Sellers Collection**: Comprehensive seller information including:
+### Database Schema (`shared/schema.ts`)
+- **Sellers Table**: Comprehensive seller information including:
   - Brand details (name, website, category)
   - Contact information (email, phone)
   - Business metrics (monthly orders)
   - API credentials (unique API keys)
   - Verification status (email verification timestamp)
-- **Email Verification Tokens Collection**: Temporary OTP storage with automatic expiration via MongoDB TTL indexes
+- **Email Verification Tokens Table**: Temporary OTP storage with automatic expiration
+- **Users Table**: Authentication system for admin access
 
 ### Frontend Pages
 - **Navigation Bar**: Fixed navbar with Bellu Kart branding and page navigation
