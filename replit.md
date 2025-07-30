@@ -1,8 +1,8 @@
-# Bellu Seller Onboarding Platform
+# bellu.ai Seller Onboarding Platform
 
 ## Overview
 
-This is a production-ready full-stack web application built for Bellu's seller onboarding platform. The application allows D2C brands to activate Bellu's 10-minute delivery infrastructure without creating a storefront. It features a modern React frontend with a Node.js/Express backend, PostgreSQL database integration via Drizzle ORM, and Brevo email verification service.
+This is a production-ready full-stack web application built for bellu.ai's seller onboarding platform. The application allows D2C brands to activate bellu.ai's 10-minute delivery infrastructure without creating a storefront. It features a modern React frontend with a Node.js/Express backend, PostgreSQL database integration via Drizzle ORM, and Brevo email verification service.
 
 **Current Status**: ✅ Complete with email verification flow using Brevo, professional tech company UI (black background, white buttons), simplified 2-step onboarding process, and reverted back to MongoDB database. Features session management with logout functionality and syntax-highlighted API documentation.
 
@@ -56,7 +56,7 @@ Preferred communication style: Simple, everyday language.
 - **Users Table**: Authentication system for admin access
 
 ### Frontend Pages
-- **Navigation Bar**: Fixed navbar with Bellu Kart branding and page navigation
+- **Navigation Bar**: Fixed navbar with bellu.ai branding and page navigation
 - **Onboarding Page**: Multi-step form with progress indicator
 - **Success Page**: API key display and integration instructions
 - **API Documentation**: Comprehensive integration guide with code examples

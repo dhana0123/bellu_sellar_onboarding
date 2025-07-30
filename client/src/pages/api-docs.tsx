@@ -20,7 +20,7 @@ export default function ApiDocsPage() {
           <h1 className="text-4xl font-bold mb-4">
             <span className="bg-gradient-to-r from-bellu-primary to-bellu-gold bg-clip-text text-transparent">API Documentation</span>
           </h1>
-          <p className="text-xl text-gray-300 mb-6">Integrate Bellu Kart's 10-minute delivery infrastructure</p>
+          <p className="text-xl text-gray-300 mb-6">Integrate bellu.ai's 10-minute delivery infrastructure</p>
           <div className="flex justify-center space-x-4">
             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-bellu-primary/20 text-bellu-primary">
               <div className="w-2 h-2 bg-bellu-primary rounded-full mr-2"></div>
@@ -133,7 +133,7 @@ export default function ApiDocsPage() {
                     <Plug className="text-bellu-primary mr-3" />
                     Webhook Integration
                   </h2>
-                  <p className="text-gray-300 mb-6">Bellu Kart sends order notifications to your webhook endpoint when customers place orders for delivery.</p>
+                  <p className="text-gray-300 mb-6">bellu.ai sends order notifications to your webhook endpoint when customers place orders for delivery.</p>
                   
                   <div className="space-y-6">
                     <div>

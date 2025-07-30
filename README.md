@@ -1,6 +1,6 @@
-# Bellu Kart Seller Onboarding Platform
+# bellu.ai Seller Onboarding Platform
 
-A production-ready full-stack web application for Bellu Kart's seller onboarding platform, allowing D2C brands to activate 10-minute delivery infrastructure.
+A production-ready full-stack web application for bellu.ai's seller onboarding platform, allowing D2C brands to activate 10-minute delivery infrastructure.
 
 ## Features
 
@@ -37,7 +37,7 @@ The project requires these environment variables:
 DATABASE_URL=postgresql://user:password@localhost:5432/database
 
 # MongoDB (original implementation - for reference)
-MONGODB_URI=mongodb://localhost:27017/bellu-kart-sellers
+MONGODB_URI=mongodb://localhost:27017/bellu-ai-sellers
 ```
 
 ### Email Service

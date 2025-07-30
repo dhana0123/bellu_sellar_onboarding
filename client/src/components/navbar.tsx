@@ -31,7 +31,7 @@ const Navbar = () => {
                   <Building2 className="text-black text-lg" />
                 </div>
                 <div>
-                  <div className="text-white font-bold text-lg">Bellu</div>
+                  <div className="text-white font-bold text-lg">bellu.ai</div>
                   <div className="text-gray-400 text-xs -mt-1">Seller Platform</div>
                 </div>
               </div>

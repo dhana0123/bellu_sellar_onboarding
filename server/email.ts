@@ -17,7 +17,7 @@ export async function sendEmail(params: EmailParams): Promise<{ success: boolean
     sendSmtpEmail.subject = params.subject;
     sendSmtpEmail.htmlContent = params.htmlContent;
     sendSmtpEmail.textContent = params.textContent || params.htmlContent.replace(/<[^>]*>/g, '');
-    sendSmtpEmail.sender = { name: 'Bellu Kart', email: 'noreply@bellu.ai' };
+    sendSmtpEmail.sender = { name: 'bellu.ai', email: 'noreply@bellu.ai' };
     sendSmtpEmail.to = [{ email: params.to }];
 
     await apiInstance.sendTransacEmail(sendSmtpEmail);
@@ -33,40 +33,40 @@ export function generateOTP(): string {
 }
 
 export function generateVerificationEmail(otp: string, brandName: string): { subject: string; htmlContent: string } {
-  const subject = 'Verify your email for Bellu Kart integration';
+  const subject = 'Verify your email for bellu.ai integration';
   
   const htmlContent = `
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset="utf-8">
-        <title>Email Verification - Bellu Kart</title>
+        <title>Email Verification - bellu.ai</title>
         <style>
-            body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #0a0a0a; color: #ffffff; }
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #000000; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
             .header { text-align: center; margin-bottom: 30px; }
-            .logo { color: #14b8a6; font-size: 28px; font-weight: bold; }
-            .content { background-color: #1a1a1a; padding: 40px; border-radius: 12px; border: 1px solid #333; }
-            .otp-code { font-size: 36px; font-weight: bold; color: #14b8a6; text-align: center; 
-                       background-color: #0a0a0a; padding: 20px; border-radius: 8px; margin: 20px 0; 
-                       letter-spacing: 8px; border: 2px solid #14b8a6; }
-            .text { line-height: 1.6; color: #e5e5e5; }
-            .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+            .logo { color: #000000; font-size: 28px; font-weight: bold; }
+            .content { background-color: #ffffff; padding: 40px; border-radius: 12px; border: 1px solid #cccccc; }
+            .otp-code { font-size: 36px; font-weight: bold; color: #000000; text-align: center; 
+                       background-color: #ffffff; padding: 20px; border-radius: 8px; margin: 20px 0; 
+                       letter-spacing: 8px; border: 2px solid #000000; }
+            .text { line-height: 1.6; color: #333333; }
+            .footer { text-align: center; margin-top: 30px; color: #666666; font-size: 14px; }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
-                <div class="logo">Bellu Kart</div>
-                <p style="color: #14b8a6;">10-Minute Delivery Infrastructure</p>
+                <div class="logo">bellu.ai</div>
+                <p style="color: #000000;">10-Minute Delivery Infrastructure</p>
             </div>
             
             <div class="content">
-                <h2 style="color: #14b8a6; margin-top: 0;">Email Verification Required</h2>
+                <h2 style="color: #000000; margin-top: 0;">Email Verification Required</h2>
                 
                 <p class="text">Hello ${brandName},</p>
                 
-                <p class="text">Welcome to Bellu Kart! To complete your seller onboarding and activate our 10-minute delivery infrastructure for your brand, please verify your email address.</p>
+                <p class="text">Welcome to bellu.ai! To complete your seller onboarding and activate our 10-minute delivery infrastructure for your brand, please verify your email address.</p>
                 
                 <p class="text">Your verification code is:</p>
                 
@@ -80,7 +80,7 @@ export function generateVerificationEmail(otp: string, brandName: string): { sub
             </div>
             
             <div class="footer">
-                <p>© 2024 Bellu Kart - India's Fastest Delivery Infrastructure</p>
+                <p>© 2024 bellu.ai - India's Fastest Delivery Infrastructure</p>
                 <p>This is an automated email. Please do not reply.</p>
             </div>
         </div>
