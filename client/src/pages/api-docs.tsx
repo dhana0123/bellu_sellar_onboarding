@@ -133,7 +133,7 @@ export default function ApiDocsPage() {
                     <Plug className="text-bellu-primary mr-3" />
                     Webhook Integration
                   </h2>
-                  <p className="text-gray-300 mb-6">bellu.ai sends order notifications to your webhook endpoint when customers place orders for delivery.</p>
+                  <p className="text-gray-300 mb-6">bellu.ai sends real-time notifications to your webhook endpoint for all order lifecycle events - from creation to delivery completion.</p>
                   
                   <div className="space-y-6">
                     <div>
@@ -146,9 +146,60 @@ export default function ApiDocsPage() {
                     </div>
 
                     <div>
-                      <h4 className="font-semibold mb-3">Sample Payload</h4>
-                      <CodeBlock
-                        code={`{
+                      <h4 className="font-semibold mb-3">Webhook Events</h4>
+                      <div className="space-y-4 mb-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="bg-bellu-darker border border-bellu-gray rounded-lg p-4">
+                            <div className="flex items-center mb-2">
+                              <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                              <code className="text-blue-400">order.created</code>
+                            </div>
+                            <p className="text-gray-400 text-sm">New order placed by customer</p>
+                          </div>
+                          <div className="bg-bellu-darker border border-bellu-gray rounded-lg p-4">
+                            <div className="flex items-center mb-2">
+                              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                              <code className="text-yellow-400">order.confirmed</code>
+                            </div>
+                            <p className="text-gray-400 text-sm">Order confirmed and accepted by seller</p>
+                          </div>
+                          <div className="bg-bellu-darker border border-bellu-gray rounded-lg p-4">
+                            <div className="flex items-center mb-2">
+                              <div className="w-3 h-3 bg-orange-500 rounded-full mr-3"></div>
+                              <code className="text-orange-400">order.prepared</code>
+                            </div>
+                            <p className="text-gray-400 text-sm">Order items prepared and ready for pickup</p>
+                          </div>
+                          <div className="bg-bellu-darker border border-bellu-gray rounded-lg p-4">
+                            <div className="flex items-center mb-2">
+                              <div className="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                              <code className="text-purple-400">order.dispatched</code>
+                            </div>
+                            <p className="text-gray-400 text-sm">Order picked up by delivery partner</p>
+                          </div>
+                          <div className="bg-bellu-darker border border-bellu-gray rounded-lg p-4">
+                            <div className="flex items-center mb-2">
+                              <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                              <code className="text-green-400">order.delivered</code>
+                            </div>
+                            <p className="text-gray-400 text-sm">Order successfully delivered to customer</p>
+                          </div>
+                          <div className="bg-bellu-darker border border-bellu-gray rounded-lg p-4">
+                            <div className="flex items-center mb-2">
+                              <div className="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                              <code className="text-red-400">order.cancelled</code>
+                            </div>
+                            <p className="text-gray-400 text-sm">Order cancelled by customer or system</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3">Sample Payloads</h4>
+                      <div className="space-y-4">
+                        <CodeBlock
+                          code={`{
   "event": "order.created",
   "timestamp": "2024-01-15T10:30:00Z",
   "data": {
@@ -170,7 +221,7 @@ export default function ApiDocsPage() {
     "total_amount": 480,
     "delivery_address": {
       "street": "123 MG Road",
-      "area": "Indiranagar",
+      "area": "Indiranagar", 
       "city": "Bengaluru",
       "pincode": "560038"
     },
@@ -180,23 +231,87 @@ export default function ApiDocsPage() {
     }
   }
 }`}
-                        language="json"
-                        title="Webhook Payload"
-                      />
+                          language="json"
+                          title="Order Created Payload"
+                        />
+                        
+                        <CodeBlock
+                          code={`{
+  "event": "order.dispatched",
+  "timestamp": "2024-01-15T10:45:00Z",
+  "data": {
+    "order_id": "BK_ORDER_xyz123",
+    "external_order_id": "YOUR_ORDER_123",
+    "delivery_partner": {
+      "name": "Ravi Kumar",
+      "phone": "+91 98765 12345",
+      "vehicle_number": "KA01AB1234"
+    },
+    "estimated_delivery_time": "2024-01-15T11:00:00Z",
+    "tracking_url": "https://track.bellu.ai/BK_ORDER_xyz123"
+  }
+}`}
+                          language="json"
+                          title="Order Dispatched Payload"
+                        />
+
+                        <CodeBlock
+                          code={`{
+  "event": "order.delivered",
+  "timestamp": "2024-01-15T10:58:00Z", 
+  "data": {
+    "order_id": "BK_ORDER_xyz123",
+    "external_order_id": "YOUR_ORDER_123",
+    "delivered_at": "2024-01-15T10:58:00Z",
+    "delivery_time_minutes": 28,
+    "customer_rating": 5,
+    "delivery_proof": {
+      "type": "photo",
+      "url": "https://proof.bellu.ai/xyz123.jpg"
+    }
+  }
+}`}
+                          language="json"
+                          title="Order Delivered Payload"
+                        />
+                      </div>
                     </div>
 
                     <div>
                       <h4 className="font-semibold mb-3">Response Format</h4>
-                      <p className="text-gray-400 text-sm mb-3">Your webhook endpoint should respond with HTTP 200 and the following JSON:</p>
-                      <CodeBlock
-                        code={`{
+                      <p className="text-gray-400 text-sm mb-3">Your webhook endpoint should respond with HTTP 200 and appropriate JSON based on the event:</p>
+                      <div className="space-y-3">
+                        <CodeBlock
+                          code={`// For order.created
+{
   "status": "received",
   "order_id": "YOUR_ORDER_123",
   "estimated_prep_time": 300
+}
+
+// For order.confirmed  
+{
+  "status": "confirmed",
+  "order_id": "YOUR_ORDER_123",
+  "prep_start_time": "2024-01-15T10:32:00Z"
+}
+
+// For order.prepared
+{
+  "status": "ready_for_pickup", 
+  "order_id": "YOUR_ORDER_123",
+  "pickup_instructions": "Counter 2, ask for John's order"
+}
+
+// For other events
+{
+  "status": "acknowledged",
+  "order_id": "YOUR_ORDER_123"
 }`}
-                        language="json"
-                        title="Response JSON"
-                      />
+                          language="json"
+                          title="Response JSON Examples"
+                        />
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -228,18 +343,45 @@ app.use(express.json());
 app.post('/webhook/bellu-orders', (req, res) => {
   const { event, data } = req.body;
   
-  if (event === 'order.created') {
-    const order = data;
-    
-    console.log(\`New order: \${order.order_id}\`);
-    console.log(\`Items: \${order.items.length}\`);
-    console.log(\`Total: ₹\${order.total_amount}\`);
-    
-    res.json({
-      status: 'received',
-      order_id: order.external_order_id,
-      estimated_prep_time: 300
-    });
+  switch (event) {
+    case 'order.created':
+      console.log(\`New order: \${data.order_id}\`);
+      res.json({
+        status: 'received',
+        order_id: data.external_order_id,
+        estimated_prep_time: 300
+      });
+      break;
+      
+    case 'order.confirmed':
+      console.log(\`Order confirmed: \${data.order_id}\`);
+      res.json({
+        status: 'confirmed',
+        order_id: data.external_order_id,
+        prep_start_time: new Date().toISOString()
+      });
+      break;
+      
+    case 'order.dispatched':
+      console.log(\`Order dispatched: \${data.order_id}\`);
+      console.log(\`Delivery partner: \${data.delivery_partner.name}\`);
+      res.json({
+        status: 'acknowledged',
+        order_id: data.external_order_id
+      });
+      break;
+      
+    case 'order.delivered':
+      console.log(\`Order delivered: \${data.order_id}\`);
+      console.log(\`Delivery time: \${data.delivery_time_minutes} minutes\`);
+      res.json({
+        status: 'acknowledged',
+        order_id: data.external_order_id
+      });
+      break;
+      
+    default:
+      res.json({ status: 'acknowledged' });
   }
 });
 
@@ -263,18 +405,42 @@ app = Flask(__name__)
 @app.route('/webhook/bellu-orders', methods=['POST'])
 def handle_order():
     data = request.get_json()
+    event = data['event']
+    order_data = data['data']
     
-    if data['event'] == 'order.created':
-        order = data['data']
-        
-        print(f"New order: {order['order_id']}")
-        print(f"Total: ₹{order['total_amount']}")
-        
+    if event == 'order.created':
+        print(f"New order: {order_data['order_id']}")
         return jsonify({
             'status': 'received',
-            'order_id': order['external_order_id'],
+            'order_id': order_data['external_order_id'],
             'estimated_prep_time': 300
         })
+        
+    elif event == 'order.confirmed':
+        print(f"Order confirmed: {order_data['order_id']}")
+        return jsonify({
+            'status': 'confirmed',
+            'order_id': order_data['external_order_id'],
+            'prep_start_time': datetime.now().isoformat()
+        })
+        
+    elif event == 'order.dispatched':
+        print(f"Order dispatched: {order_data['order_id']}")
+        print(f"Delivery partner: {order_data['delivery_partner']['name']}")
+        return jsonify({
+            'status': 'acknowledged',
+            'order_id': order_data['external_order_id']
+        })
+        
+    elif event == 'order.delivered':
+        print(f"Order delivered: {order_data['order_id']}")
+        print(f"Delivery time: {order_data['delivery_time_minutes']} minutes")
+        return jsonify({
+            'status': 'acknowledged',
+            'order_id': order_data['external_order_id']
+        })
+        
+    return jsonify({'status': 'acknowledged'})
 
 app.run(port=3000)`}
                         language="python"
