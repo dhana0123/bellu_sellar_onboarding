@@ -16,7 +16,7 @@ export const sellers = pgTable("sellers", {
   email: text("email").notNull().unique(),
   phone: text("phone").notNull(),
   category: text("category").notNull(),
-  monthlyOrders: text("monthly_orders"),
+  monthlyOrders: text("monthly_orders").default(""),
   apiKey: text("api_key").notNull().unique(),
   emailVerified: timestamp("email_verified"),
   createdAt: timestamp("created_at").defaultNow(),
